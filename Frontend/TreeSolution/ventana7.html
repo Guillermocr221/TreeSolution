@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TreeSolution</title>
+    <link rel="stylesheet" href="v7.css">
+</head>
+<body>
+    <header class="header">
+        <div class="header__logo">TreeSolution</div>
+        <div class="header__search-bar">
+            <input type="text" class="header__search-input" placeholder="Buscar productos">
+            <button class="header__search-button">🔍</button>
+        </div>
+        <div class="header__actions">
+            <button class="header__action-button">👤</button>
+            <button class="header__action-button">🛒</button>
+        </div>
+    </header>
+    <nav class="nav">
+        <button class="nav__button">Inicio</button>
+        <button class="nav__button">Sobre nosotros</button>
+        <button class="nav__button">Contáctanos</button>
+    </nav>
+    <main class="main">
+        <div class="product">
+            <div class="product__images">
+                <img src="./images/producto1.jpg" alt="Producto Imagen Principal" class="product__main-image">
+                
+            </div>
+            <div class="product__details">
+                <h2 class="product__title">TITULO DEL PRODUCTO</h2>
+                <p class="product__price">PRECIO:</p>
+                <p class="product__date">FECHA:</p>
+                <p class="product__description">DESCRIPCIÓN:</p>
+                <button class="product__add-to-cart">Agregar al carrito</button>
+            </div>
+        </div>
+        <div class="related-products">
+            <h3 class="related-products__title">También te puede interesar</h3>
+            <div class="related-products__items">
+                <div class="related-products__item">
+                    <img src="./images/producto4.jpg" alt="Producto 4" class="related-products__image">
+                    <p class="related-products__description">descrip</p>
+                </div>
+                <div class="related-products__item">
+                    <img src="./images/producto5.jpg" alt="Producto 5" class="related-products__image">
+                    <p class="related-products__description">descrip</p>
+                </div>
+                <div class="related-products__item">
+                    <img src="./images/producto6.jpg" alt="Producto 6" class="related-products__image">
+                    <p class="related-products__description">descrip</p>
+                </div>
+            </div>
+        </div>
+    </main>
+    <script src="script.js"></script>
+</body>
+</html>

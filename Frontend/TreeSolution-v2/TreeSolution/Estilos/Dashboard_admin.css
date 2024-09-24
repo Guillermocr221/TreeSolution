@@ -1,0 +1,132 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.header {
+    background-color: #333;
+    color: white;
+    padding: 1em;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.header__logo {
+    font-size: 1.5em;
+    font-weight: bold;
+}
+
+.header__nav {
+    display: flex;
+}
+
+.header__nav-list {
+    display: flex;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.header__nav-item {
+    margin-left: 1em;
+}
+
+.header__nav-link {
+    color: white;
+    text-decoration: none;
+    padding: 0.5em 1em;
+}
+
+.header__nav-link:hover {
+    background-color: #575757;
+}
+
+.main {
+    flex: 1;
+    display: flex;
+}
+
+.sidebar {
+    width: 250px;
+    background-color: #f4f4f4;
+    padding: 1em;
+}
+
+.sidebar__list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.sidebar__item {
+    padding: 1em;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.sidebar__item:hover {
+    background-color: #ddd;
+}
+
+.sidebar__item--active {
+    background-color: #ddd;
+}
+
+.sidebar__item:hover .sidebar__item--active {
+    background-color: #ddd;
+    text-shadow: none; /* Quitar el sombreado del texto */
+}
+
+.content {
+    flex: 1;
+    padding: 2em;
+}
+
+.user-table, .product-table, .employee-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.user-table th, .product-table th, .employee-table th, 
+.user-table td, .product-table td, .employee-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+.user-table th, .product-table th, .employee-table th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+}
+
+.user-table tr:hover, .product-table tr:hover, .employee-table tr:hover {
+    background-color: #f1f1f1;
+}
+
+.footer {
+    background-color: #333;
+    color: white;
+    text-align: center;
+    padding: 1em;
+}
+.titulo {
+    transition: all 1s ease;
+    transition-property: transform;
+    margin-left: 200px;
+    margin-right: 200px;
+    position: relative;
+    
+  }
+  .titulo:hover{
+    transform: scale(1.1);
+  }
+
+
+
+  

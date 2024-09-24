@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Administración - TreeSolution</title>
+    <link rel="stylesheet" href="Dashboard_admin.css">
+</head>
+<body>
+    <header class="header">
+        <div class="header__logo">TreeSolution</div>
+        <nav class="header__nav">
+            <ul class="header__nav-list">
+                <li class="header__nav-item"><a href="#" class="header__nav-link">Inicio</a></li>
+                <li class="header__nav-item"><a href="#" class="header__nav-link">Perfil</a></li>
+                <li class="header__nav-item"><a href="#" class="header__nav-link" id="logoutButton">Cerrar Sesión</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main class="main">
+        <aside class="sidebar">
+            <ul class="sidebar__list">
+                <li class="sidebar__item">Panel de administración</li>
+                <li class="sidebar__item">Tablero</li>
+                <li class="sidebar__item">Productos</li>
+                <li class="sidebar__item sidebar__item--active">Usuarios</li>
+                <li class="sidebar__item">Empleados</li>
+                
+            </ul>
+        </aside>
+        <section class="content">
+            <h2>Usuarios</h2>
+            <table class="user-table">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Imagen de perfil</th>
+                        <th>Nombre</th>
+                        <th>Correo</th>
+                        <th>Contacto</th>
+                        <th>Login con</th>
+                        <th>Estado de verificación</th>
+                        <th>Fecha de creación</th>
+                        <th>Acción</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>101</td>
+                        <td><img src="images/user_generico.png" alt="Perfil" style="width: 60px; height: 60px;"></td>
+                        <td>Nombre</td>
+                        <td>nombre@gmail.com</td>
+                        <td>999999999</td>
+                        <td>Google</td>
+                        <td>Verificado</td>
+                        <td>dd-mm-aaaa</td>
+                        <td>
+                            <button>Ver</button>
+                            <button>Bloquear</button>
+                        </td>
+                    </tr>
+                    <!-- Más filas según sea necesario -->
+                </tbody>
+            </table>
+        </section>
+    </main>
+    <footer class="footer">
+        <p>&copy; 2024 TreeSolution. Todos los derechos reservados.</p>
+    </footer>
+    <script src="Inicio.js"></script>
+</body>
+</html>

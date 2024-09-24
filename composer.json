@@ -1,0 +1,12 @@
+{
+    "name": "treesolutionb/composer",
+    "description": "app",
+    "autoload": {
+        "psr-4": {
+            "Model\\": "./Modelo",
+            "MVC\\": "./",
+            "Controllers\\" : "./Controlador"
+        }
+    },
+    "require": {}
+}
