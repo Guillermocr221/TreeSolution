@@ -6,9 +6,15 @@
     <title>Dashboard</title>
     <link rel="stylesheet" href="/estilos/Dashboard2.css">
     <link rel="icon" href="/imagenes/favicon-32x32.png" type="images">
-    <script src="https://www.paypal.com/sdk/js?client-id=BAA4-z0HoLKi6H13QbbRSaUyE-Sy_63PkNNLda0IJeug388lyPiPLxHG1fz-7FSqrfOnxoHfcUp4c9_Y1Y&components=hosted-buttons&disable-funding=venmo&currency=USD"></script>
+    <script
+            src="https://www.paypal.com/sdk/js?client-id=AQloEfRlpaWaapUG4gFKg5MP7mbe2ULQTKTjQdObq-3BtrbnvthZlJG9UEtY2n0QE6unEk5cZsCGRCZk&buyer-country=US&currency=USD&components=buttons&enable-funding=venmo&disable-funding=paylater"
+            data-sdk-integration-source="developer-studio"
+    ></script>
+
 </head>
 <body>
+
+
     <header class="header">
         <div class="header__logo">TreeSolution</div>
         <nav class="header__nav">
@@ -258,17 +264,8 @@
 
     <div id="payModal" class="modal">
         <h2>Realizar pago</h2>
-        <div class="modal-content">
-            <!-- <input class="payInput payInput-nombre" type="text" placeholder="Ingrese su nombre" required>
-            <input class="payInput payInput-direccion" type="text" placeholder="Ingrese direccion" required>
-            <input class="payInput payInput-telefono" type="number" placeholder="Ingrese Numero de Celular" required>
-            <input class="payInput payInput-tarjeta" type="numer" placeholder="Ingrese Numero de tarjeta de credito" required>
-            <input type="number" class="payInput payInput-fechaVenc" placeholder="mm/yy" required>
-            <input type="number" class="payInput payInput-cod" placeholder="csv" required>
-
-            <button id="pagarPedido">Pagar</button> -->
-        <div id="paypal-container-MFFA2E9T8BRS2" class="payModal_pagarPedido"></div>
-            
+        <div class="modal-content">    
+            <div id="paypal-button-container" style="max-width:1000px;"></div>
         </div>
         
     </div>
@@ -278,12 +275,9 @@
     </footer>
     
     <script src='//cdn.jsdelivr.net/npm/sweetalert2@11'></script>
+
     <script src="/scripts/Dashboard2.js"></script>
-    <script>
-        paypal.HostedButtons({
-            hostedButtonId: "MFFA2E9T8BRS2",
-        }).render("#paypal-container-MFFA2E9T8BRS2")
-    </script>
-    
+    <script src="/scripts/payPal.js"></script>
+
 </body>
 </html>

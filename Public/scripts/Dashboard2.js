@@ -1,3 +1,4 @@
+
 document.addEventListener('DOMContentLoaded', function () {
   const togglePassword = document.querySelector('#togglePassword');
   const password = document.querySelector('#password');
@@ -15,6 +16,7 @@ document.addEventListener('DOMContentLoaded', function () {
   const productModal = document.getElementById('productModal');
 
   const payModal = document.getElementById('payModal');
+  
 
   const searchButton = document.getElementById('searchButton');
   const searchInput = document.getElementById('searchInput');
@@ -221,6 +223,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
       totalPriceElement.textContent = `Total: S/ ${total.toFixed(2)}`;
       cartCount.textContent = totalItems;
+      totalPedido = document.getElementById("totalPrice");
   }
 
   // Función para eliminar un ítem del carrito
@@ -253,15 +256,11 @@ document.addEventListener('DOMContentLoaded', function () {
   // Pagar
   document.getElementById('checkout').addEventListener('click', function () {
       
-      
-      payModal.style.display ='block'
-      cartModal.style.display = 'none';
-      if(false){
-        cart = [];
-        updateCart();
-        
-        overlay.style.display = 'none';
-        document.body.style.overflow = '';
+      if(cart.length == 0){
+        console.log("Carro vacio!")
+      }else{
+        payModal.style.display ='block'
+        cartModal.style.display = 'none';
       }
       
   });
@@ -481,3 +480,6 @@ document.addEventListener("DOMContentLoaded", function() {
       }
   });
 });
+
+
+
