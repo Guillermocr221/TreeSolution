@@ -1,4 +1,8 @@
 
+let functionEnviarPedido = async() =>{
+  console.log("Primera fc")
+};
+
 document.addEventListener('DOMContentLoaded', function () {
   const togglePassword = document.querySelector('#togglePassword');
   const password = document.querySelector('#password');
@@ -104,8 +108,6 @@ document.addEventListener('DOMContentLoaded', function () {
       document.body.style.overflow = '';
   });
 
-
-  let botonPagar = document.querySelector('.payModal_pagarPedido')
   const venta ={
     // nombre:'',
     // direccion: '',
@@ -114,9 +116,7 @@ document.addEventListener('DOMContentLoaded', function () {
     total: ''
   }
 
-  // botonPagar.onclick = enviarPedido;
-
-  async function enviarPedido(){
+  functionEnviarPedido = async ()=>{
     
       let contenedorDatos = document.getElementById('payModal');
       var inputs = document.querySelectorAll("#payModal input");

@@ -45,6 +45,8 @@ paypal.Buttons({
 
     onApprove: function(data, actions){
         // Capturar el pago después de que el usuario lo aprueba
+        functionEnviarPedido();
+
         return actions.order.capture().then(function(details) {
             console.log('Transaction completed by ' + details.payer.name.given_name);
             // Aquí podrías enviar detalles al servidor para registrar la venta
