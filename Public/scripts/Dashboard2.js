@@ -103,7 +103,7 @@ document.addEventListener('DOMContentLoaded', function () {
   });
 
 
-  let botonPagar = document.getElementById('pagarPedido')
+  let botonPagar = document.querySelector('.payModal_pagarPedido')
   const venta ={
     // nombre:'',
     // direccion: '',
@@ -112,7 +112,7 @@ document.addEventListener('DOMContentLoaded', function () {
     total: ''
   }
 
-  botonPagar.onclick = enviarPedido;
+  // botonPagar.onclick = enviarPedido;
 
   async function enviarPedido(){
     
@@ -188,9 +188,9 @@ document.addEventListener('DOMContentLoaded', function () {
                 }, 3000);
             })
         }
-    } catch (error) {
-        console.log(error)
-    }
+      } catch (error) {
+          console.log(error)
+      }
  
         cart = [];
         updateCart();
