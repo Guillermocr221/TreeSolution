@@ -14,19 +14,19 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     // Manejar el envío del formulario de inicio de sesión
-    if (loginForm) {
-        loginForm.addEventListener('submit', function (event) {
-            event.preventDefault();
-            const email = document.querySelector('#email').value;
-            const passwordValue = password.value;
+    // if (loginForm) {
+    //     loginForm.addEventListener('submit', function (event) {
+    //         event.preventDefault();
+    //         const email = document.querySelector('#email').value;
+    //         const passwordValue = password.value;
 
-            if (email === 'cliente@unmsm.edu.pe' && passwordValue === 'treesolution2024') {
-                window.location.href = 'Dashboard.html';
-            } else if (email === 'admin@unmsm.edu.pe' && passwordValue === 'admin2024') {
-                window.location.href = 'Dashboard_admin.html';
-            } else {
-                alert('Credenciales incorrectas. Por favor, inténtalo de nuevo.');
-            }
-        });
-    }
+    //         if (email === 'cliente@unmsm.edu.pe' && passwordValue === 'treesolution2024') {
+    //             window.location.href = 'Dashboard.html';
+    //         } else if (email === 'admin@unmsm.edu.pe' && passwordValue === 'admin2024') {
+    //             window.location.href = 'Dashboard_admin.html';
+    //         } else {
+    //             alert('Credenciales incorrectas. Por favor, inténtalo de nuevo.');
+    //         }
+    //     });
+    // }
 });

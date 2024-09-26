@@ -4,6 +4,6 @@ namespace Model;
 
 class Producto extends ActiveRecord{
 
-    protected static $tabla = 'Productos';
+    protected static $tabla = 'productos';
     
 }    

@@ -12,7 +12,7 @@ class PaginasController{
         $router->render('dashboard');
     }
     public static function dashboard2(Router $router){
-        $router->render('dashboard2');
+        $router->render('Dashboard2');
     }
     public static function Login(Router $router){
         $router->render('Login');
@@ -21,6 +21,6 @@ class PaginasController{
         $router->render('CrearCuenta');
     }
     public static function Admin(Router $router){
-        $router->render('dashboard_admin');
+        $router->render('Dashboard_admin');
     }
 }
