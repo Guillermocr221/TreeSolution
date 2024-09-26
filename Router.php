@@ -1,6 +1,7 @@
 <?php
 
 namespace MVC;
+ 
 
 class Router {
 
@@ -11,7 +12,7 @@ class Router {
         $this->rutasGET[$url] = $fn;
     }
 
-    public function post($url, $fn){
+    public function post($url, $fn){//fn = funcion asociada a esa url
         $this->rutasPOST[$url] = $fn;
     }
 
@@ -33,7 +34,7 @@ class Router {
             call_user_func($fn, $this);
 
         }else{
-            echo " Pagina no encontrada";
+            echo " Pagina no encontrada en el sistema";
         }
     }
 

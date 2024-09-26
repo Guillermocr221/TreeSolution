@@ -12,7 +12,7 @@ use Controllers\AdminController;
 
 //Metodo para obtener todos los productos de la db
 // $productos = Producto::all();
-// debuguear($productos);
+// debuguear($productos) ; 
 
 $router = new Router();
 
