@@ -169,7 +169,7 @@ document.addEventListener('DOMContentLoaded', function () {
       // console.log([...datos]);
       try {
         // Petición hacia la api
-        const url = '/api/pedido'
+        const url = `${location.origin}/api/pedido`
         const respuesta = await fetch(url, {
             method: 'POST',
             body: datos

@@ -72,7 +72,7 @@ async function eliminarUsuario(idUser){
 
     try {
         // Petición hacia la api
-        const url = '/api/borrarUsuario'
+        const url = `${location.origin}/api/borrarUsuario`
         const respuesta = await fetch(url, {
             method: 'POST',
             body: datos
@@ -107,7 +107,7 @@ async function activarUsuario(idUser){
 
     try {
         // Petición hacia la api
-        const url = '/api/activarUsuario'
+        const url = `${location.origin}/api/activarUsuario`
         const respuesta = await fetch(url, {
             method: 'POST',
             body: datos
