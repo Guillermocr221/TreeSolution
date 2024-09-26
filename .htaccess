@@ -1,0 +1,5 @@
+DirectoryIndex index.php
+
+RewriteEngine On
+RewriteRule ^$ Public/index.php [L]
+RewriteRule ^((?!Public/).*)$ Public/$1 [L,NC]
