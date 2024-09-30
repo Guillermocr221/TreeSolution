@@ -11,6 +11,7 @@
             data-sdk-integration-source="developer-studio"
     ></script>
 
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
 </head>
 <body>
 
@@ -35,14 +36,14 @@
         <div class="header__actions">
             <img src="/imagenes/user.png" alt="Perfil" class="header__action-icon" 
                 style="width: 30px; height: 30px; <?php
-                                                    session_start();
+                                                    
                                                     if($_SESSION == []){
                                                         echo "display:none;";
                                                     } 
                                                     ?>" >
             <div class="dropdown-menu" id="userMenu">
-                <a href="#" id="editarPerfil">Editar perfil</a>
-                <a href="#" id="verPerfil">Ver perfil</a>
+                <a id="editarPerfil" style="display: none;">Editar perfil</a>
+                <a id="verPerfil">Ver perfil</a>
                 <a href="/logout" id="logout">Cerrar sesión</a>
             </div>
             <div class="cart-icon-container" >
@@ -51,75 +52,84 @@
             </div>
         </div>
     </header>
+    
 <!-- HTML para el overlay -->
 <div id="overlay"></div>
+<?php 
 
+    // debuguear($usuario);
+?>     
 <!-- HTML para el modal de Ver Perfil -->
 <div class="modal" id="verPerfilModal">
     <div class="modal-content">
         <span class="close" id="closeVerPerfilModal">&times;</span>
-        <h2>Ver Perfil</h2>
-        <form id="verPerfilForm">
-            <label for="nombres">Nombres:</label>
-            <input type="text" id="nombres" name="nombres" readonly>
-            <label for="apellidos">Apellidos:</label>
-            <input type="text" id="apellidos" name="apellidos" readonly>
-            <label for="edad">Edad:</label>
-            <input type="text" id="edad" name="edad" readonly>
-            <label for="correo">Correo:</label>
-            <input type="email" id="correo" name="correo" readonly>
-            <label for="celular">Celular:</label>
-            <input type="text" id="celular" name="celular" readonly>
-            <label for="pais">País:</label>
-            <input type="text" id="pais" name="pais" readonly>
-            <label for="provincia">Provincia:</label>
-            <input type="text" id="provincia" name="provincia" readonly>
-            <label for="distrito">Distrito:</label>
-            <input type="text" id="distrito" name="distrito" readonly>
-            <label for="direccion">Dirección:</label>
-            <input type="text" id="direccion" name="direccion" readonly>
+        <h2 class="titulo__verPerfil">Ver Perfil</h2>
+        <h2 class="titulo__editarPerfil ">Editar Perfil</h2>                                       
+        <form id="verPerfilForm" method="POST" enctype="multipart/form-data">
+
+            <div class="div1--perfil">
+
+                <div class=" perfil--imagen">
+                    <input type="file" name="imagen" id="profile_image" accept="image/*">
+
+                    <picture class="perfil--picture">
+                        <?php 
+                            $nombreImagen =$usuario->imagen;
+                        ?>
+                        <img id="imagenVistaPrevia" src='/imagenes/uploads/<?php echo $nombreImagen; ?>' alt="Imagen de usuario">
+                    </picture>                                                                 
+                </div>                                            
+
+                <fieldset class="perfil__div perfil--datosPersonales">
+                    
+                    <legend>Datos Personales</legend> 
+                
+                    <label for="nombres">Nombres:</label>
+                    <input type="text" id="nombres" name="nombre" value ='<?php echo $usuario->nombre ?>' readonly>
+                    
+                    <label for="apellidos">Apellidos:</label>
+                    <input type="text" id="apellidos" name="apellido" value='<?php echo $usuario->apellido ?>' readonly>
+                    
+                    <label for="dni">DNI:</label>
+                    <input type="text" id="edad" name="dni" value='<?php echo $usuario->dni ?>' readonly maxlength="8"> 
+                </fieldset>       
+            </div>                                        
+
+            <fieldset class="perfil__div perfil--contacto">
+                
+                <legend>Contacto</legend> 
+            
+                <label for="correo">Correo:</label>
+                <input type="email" id="correo" name="email" value='<?php echo $usuario->email?>' readonly>
+                
+                <label for="celular">Celular:</label>
+                <input type="text" id="celular" name="telefono" value='<?php echo $usuario->telefono?>' readonly maxlength="9">
+            </fieldset>
+            
+            <fieldset class="perfil__div perfil--direccion">
+                
+                <legend>Dirección </legend> 
+            
+                <label for="pais">País:</label>
+                <input type="text" id="pais" name="pais" value="Peru" readonly>
+                
+                <label for="provincia">Provincia:</label>
+                <input type="text" id="provincia" name="provincia" value="Lima" readonly>
+                
+                <label for="distrito">Distrito:</label>
+                <input type="text" id="distrito" name="distrito" value="SMP" readonly>
+                
+                <label for="direccion">Dirección:</label>
+                <input type="text" id="direccion" name="direccion" value="CALLE X LOTE 5 URB X MZ X" readonly>
+            </fieldset>
+            
             <div class="botones">
-                <button type="button" id="closeVerPerfilBtn">Cerrar</button>
+                <button type="button" id="modificarPerfilBtn" >Modificar</button>
+                <button type="submit" class="botonActualizarPerfil" style="display: none;">Actualizar Datos</button>
             </div>
         </form>
     </div>
 </div>
-
-<!-- HTML para el modal de Editar Perfil -->
-<div class="modal" id="editarPerfilModal">
-    <div class="modal-content">
-        <span class="close" id="closeEditarPerfilModal">&times;</span>
-        <h2 style="text-align: center;">Editar Perfil</h2>
-        <div style="text-align: center;">
-            <img src="u1.jpg" alt="Imagen" style="width: 160px; height: 120px;">
-        </div>
-        <form method="post" action="" id="editarPerfilForm">
-            <label for="nombres">Nombres:</label>
-            <input type="text" id="nombres" name="nombres">
-            <label for="apellidos">Apellidos:</label>
-            <input type="text" id="apellidos" name="apellidos">
-            <label for="edad">Edad:</label>
-            <input type="number" id="edad" name="edad">
-            <label for="correo">Correo:</label>
-            <input type="email" id="correo" name="correo">
-            <label for="celular">Celular:</label>
-            <input type="tel" id="celular" name="celular">
-            <label for="pais">País:</label>
-            <input type="text" id="pais" name="pais">
-            <label for="provincia">Provincia:</label>
-            <input type="text" id="provincia" name="provincia">
-            <label for="distrito">Distrito:</label>
-            <input type="text" id="distrito" name="distrito">
-            <label for="direccion">Dirección:</label>
-            <input type="text" id="direccion" name="direccion">
-            <div class="botones">
-                <button type="submit" id="submitEditarPerfil">Aceptar</button>
-                <button type="button" id="closeEditarPerfilBtn">Cerrar</button>
-            </div>
-        </form>
-    </div>
-</div>
-
 
     <h1 class="titulo" id="tituloAnimado">
         Bienvenido a nuestra tienda de ventas
@@ -139,7 +149,8 @@
         <div class="dots-container"></div>
       </div>
 
-    <main class="container">
+    
+      <main class="container">
         <div class="sort-container">
             <label for="sortOptions">Ordenar por:</label>
             <select id="sortOptions">
@@ -275,7 +286,13 @@
     </footer>
     
     <script src='//cdn.jsdelivr.net/npm/sweetalert2@11'></script>
+	<script>
 
+		let session;
+		session = <?php echo $usuario->ID_Usuario ?? 'false' ?> ;
+
+	</script>
+							
     <script src="/scripts/Dashboard2.js"></script>
     <script src="/scripts/payPal.js"></script>
 

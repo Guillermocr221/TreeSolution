@@ -27,7 +27,7 @@
                                                     } 
                                                     ?>">Registrarse</button>
             <button class="header__button" id="loginButton" style="<?php
-                                                    session_start();
+                                                    //session_start();
                                                     if(!$_SESSION == []){
                                                         echo "display:none;";
                                                     } 
@@ -51,12 +51,14 @@
     <script>
         function redirectToProducts() {
             <?php 
-            session_start(); 
-            if(empty($_SESSION)) {
-                echo 'window.location.href = "/login";';
-            } else {
-                echo 'window.location.href = "/dashboard";';
-            }
+            //session_start(); 
+            // if(empty($_SESSION)) {
+            //     echo 'window.location.href = "/login";';
+            // } else {
+            //     echo 'window.location.href = "/dashboard";';
+            // }
+            echo 'window.location.href = "/dashboard";';
+            
             ?>
         }
     </script>

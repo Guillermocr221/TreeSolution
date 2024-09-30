@@ -45,6 +45,6 @@
             </div>
         </div>
     </div>
-    <script src="/Public/scripts/Login.js"></script>
+    <script src="/scripts/Login.js"></script>
 </body>
 </html>

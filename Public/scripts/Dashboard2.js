@@ -88,24 +88,32 @@ document.addEventListener('DOMContentLoaded', function () {
 
   // Añadir al carrito
   document.getElementById('addToCart').addEventListener('click', function () {
-      const name = document.getElementById('modalName').textContent;
-      const price = parseFloat(document.getElementById('modalPrice').textContent.replace('Precio: S/ ', ''));
-      const quantity = parseInt(document.getElementById('quantity').value);
-      const idproducto= document.getElementById('productModal').getAttribute('data-id');
+  
+      // console.log(session)
+      if(session == false){
+        window.location.href = '/login?estado=e1' ;
+
+      }else{
+        const name = document.getElementById('modalName').textContent;
+        const price = parseFloat(document.getElementById('modalPrice').textContent.replace('Precio: S/ ', ''));
+        const quantity = parseInt(document.getElementById('quantity').value);
+        const idproducto= document.getElementById('productModal').getAttribute('data-id');
 
 
-      const existingProductIndex = cart.findIndex(product => product.name === name);
+        const existingProductIndex = cart.findIndex(product => product.name === name);
 
-      if (existingProductIndex > -1) {
-          cart[existingProductIndex].quantity += quantity;
-      } else {
-          cart.push({ name, price, quantity, idproducto });
+        if (existingProductIndex > -1) {
+            cart[existingProductIndex].quantity += quantity;
+        } else {
+            cart.push({ name, price, quantity, idproducto });
+        }
+
+        updateCart();
+        productModal.style.display = 'none';
+        overlay.style.display = 'none';
+        document.body.style.overflow = '';
       }
-
-      updateCart();
-      productModal.style.display = 'none';
-      overlay.style.display = 'none';
-      document.body.style.overflow = '';
+      
   });
 
   const venta ={
@@ -423,11 +431,37 @@ document.addEventListener("DOMContentLoaded", function() {
 
 //abrir modales de ver y editar perfil
 document.addEventListener("DOMContentLoaded", function() {
+  let queryString = window.location.search;
+  if(queryString){
+    let params = new URLSearchParams(queryString);
+    let pa =  params.get('pa');
+    if(pa == "1"){
+      Swal.fire({
+        icon: 'success',
+        title: 'Perfil Actualizado',
+        text: 'Los datos han sido registrados correctamente'
+      }).then( () => {
+        setTimeout(() => {
+          // params.delete('pa');
+
+          // // Convertir de nuevo los parámetros a una cadena
+          // let newQueryString = params.toString();
+          
+          // // Actualizar la URL en el navegador sin recargar la página
+          // window.history.replaceState({}, '', `${window.location.pathname}?${newQueryString}`);
+          window.history.replaceState({}, '', window.location.pathname);
+        }, 1);
+      })
+    }
+  }
+
   // Obtener los elementos de los modales y los botones de cierre
   const verPerfilModal = document.getElementById('verPerfilModal');
   const editarPerfilModal = document.getElementById('editarPerfilModal');
   const closeVerPerfilModal = document.getElementById('closeVerPerfilModal');
-  const closeEditarPerfilModal = document.getElementById('closeEditarPerfilModal');
+  const botonModificarPerfil = document.getElementById('modificarPerfilBtn');
+  const botonActualizarDatos = document.querySelector('.botonActualizarPerfil');
+  
   const overlay = document.getElementById('overlay');
   // Obtener los enlaces para abrir los modales
   const verPerfilLink = document.getElementById('verPerfil');
@@ -439,6 +473,30 @@ document.addEventListener("DOMContentLoaded", function() {
       overlay.style.display = 'block';
       document.body.style.overflow = 'hidden'; // Evitar el desplazamiento del cuerpo mientras el modal está abierto
   });
+
+  botonModificarPerfil.addEventListener('click',()=>{
+    
+    botonModificarPerfil.style.display = 'none';
+    botonActualizarDatos.style.display = 'block';
+
+    document.querySelector('.titulo__editarPerfil').classList.add('tituloVisible');
+    document.querySelector('.titulo__verPerfil').classList.add('tituloInvisible');
+    document.querySelector('.perfil--picture').classList.add('active');
+    const formulario = document.getElementById('verPerfilForm');
+
+    // Seleccionar todos los inputs dentro del formulario
+    const inputs = formulario.querySelectorAll('input');
+
+    // Mostrar los inputs en la consola
+    inputs.forEach(input => {
+        if(input.name !== 'email') {
+          input.removeAttribute('readonly');
+        };
+
+    });
+  })
+
+
 
   // Función para abrir el modal de editar perfil
   editarPerfilLink.addEventListener('click', function() {
@@ -452,12 +510,22 @@ document.addEventListener("DOMContentLoaded", function() {
       verPerfilModal.style.display = 'none';
       overlay.style.display = 'none';
       document.body.style.overflow = ''; // Restablecer el desplazamiento del cuerpo al cerrar el modal
-  });
 
-  closeEditarPerfilModal.addEventListener('click', function() {
-      editarPerfilModal.style.display = 'none';
-      overlay.style.display = 'none';
-      document.body.style.overflow = ''; // Restablecer el desplazamiento del cuerpo al cerrar el modal
+      document.querySelector('.titulo__editarPerfil').classList.remove('tituloVisible');
+      document.querySelector('.titulo__verPerfil').classList.remove('tituloInvisible');
+      document.querySelector('.perfil--picture').classList.remove('active');
+      botonModificarPerfil.style.display = 'block';
+      botonActualizarDatos.style.display = 'none';
+
+      // Seleccionar todos los inputs dentro del formulario
+      const formulario = document.getElementById('verPerfilForm');
+      const inputs = formulario.querySelectorAll('input');
+      inputs.forEach(input => {
+          if(input.name !== 'email') {
+            input.setAttribute('readonly',true);
+          };
+
+      });
   });
 
   // Funciones para cerrar los modales al hacer clic fuera de ellos
@@ -479,6 +547,34 @@ document.addEventListener("DOMContentLoaded", function() {
           document.body.style.overflow = ''; // Restablecer el desplazamiento del cuerpo al cerrar el modal
       }
   });
+
+  // Seleccionamos los elementos
+  const inputFile = document.getElementById('profile_image');
+  const imagenVistaPrevia = document.getElementById('imagenVistaPrevia');
+
+  // Al hacer clic en la imagen, abre el input de archivo
+  imagenVistaPrevia.addEventListener('click', () => {
+      if( botonActualizarDatos.style.display == 'block' ){
+        inputFile.click();
+      }
+  });
+
+  // Al seleccionar un archivo, mostramos la vista previa
+  inputFile.addEventListener('change', (event) => {
+      const archivo = event.target.files[0]; // Tomamos el primer archivo seleccionado
+
+      if (archivo) {
+          // Creamos un URL temporal de la imagen seleccionada para mostrarla
+          const reader = new FileReader();
+          reader.onload = function(e) {
+              imagenVistaPrevia.src = e.target.result; // Cambiamos el src de la imagen para vista previa
+          };
+          reader.readAsDataURL(archivo); // Leer el archivo como Data URL
+      }
+  });
+
+
+
 });
 
 

@@ -43,10 +43,15 @@ class LoginController{
             }
 
         }
+
         if (isset($_GET['estado'])) {
             $estado = $_GET['estado'];
-            if($estado = "registroExitoso")
-            User::setAlerta('success', 'Usuario registrado exitosamente');
+            if($estado == "registroExitoso"){
+                User::setAlerta('success', 'Usuario registrado exitosamente');
+            }
+            if($estado == "e1"){
+                User::setAlerta('success', 'Inicio de sesion requerido');
+            }
         }
 
         $alertas = User::getAlertas();
@@ -59,8 +64,14 @@ class LoginController{
 
     public static function logout(){
 
-        session_start();
+
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start(); // Si no está iniciada, la iniciamos
+        }
+
         $_SESSION = [];
+
+        session_destroy();
 
         header('Location: /');
     }
@@ -75,7 +86,7 @@ class LoginController{
             
             if($usuario){
                 //alerta, correo ya registrado.
-                debuguear('Correo ya registrado');
+                header('Location: /registrarse?estado=error');
             }else{
                 $resultado  = $usuariotmp->guardar();
 
@@ -96,7 +107,19 @@ class LoginController{
                 }
             }
         }else{
-            $router->render('CrearCuenta');
+
+            if (isset($_GET['estado'])) {
+                $estado = $_GET['estado'];
+                if($estado == "error")
+                User::setAlerta('error', 'El Correo ya ha registrado anteriormente');
+            }
+
+            $alertas = User::getAlertas();
+
+            $router->render('CrearCuenta',[
+                'alertas'=>$alertas
+            ]);
+
         }
 
 

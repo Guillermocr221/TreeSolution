@@ -120,6 +120,7 @@ main {
 
 .dropdown-menu a:hover {
     background-color: #f1f1f1;
+    cursor: pointer;
 }
 
 .container {
@@ -226,7 +227,7 @@ main {
 
 .modal-content {
     background-color: white;
-    margin: 0; /* Sin margen */
+    margin: auto; /* Sin margen */
     padding: 10px; /* Espaciado interno */
     border: none; /* Sin borde */
     border-radius: 5px;
@@ -251,12 +252,6 @@ main {
     cursor: pointer;
 }
 
-/* Estilos específicos para #editarPerfilModal y #verPerfilModal */
-#editarPerfilModal .modal-content,
-#verPerfilModal .modal-content {
-    margin-left: 0%; /* Ajusta el margen izquierdo según sea necesario */
-}
-
 #editarPerfilModal form,
 #verPerfilModal form {
     display: flex;
@@ -264,10 +259,72 @@ main {
     width: 100%; /* Asegura que el formulario ocupe todo el ancho disponible */
 }
 
+.titulo__verPerfil{
+    
+}
+.titulo__editarPerfil{
+    opacity: 0; /* Inicia como invisible */
+    visibility: hidden; /* Evita la interacción mientras está oculto */
+    max-height: 0; /* Evita el espacio vacío mientras está oculto */
+    overflow: hidden; /* Evita que el contenido se salga */
+    transition: opacity 0.5s ease, max-height 0.5s ease, visibility 0.5s ease;
+}
+
+
+.titulo__editarPerfil.tituloVisible{
+    opacity: 1; /* Muestra el contenido */
+    visibility: visible; /* Permite la interacción */
+    max-height: 500px; 
+}
+.tituloInvisible{
+    display: none;
+}
+
+
+.div1--perfil{
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+    justify-content: center;
+    align-items: center;
+}
+
+.perfil__div{
+    margin: 10px 0;
+    border: 1px solid lightgrey;
+}
+
+input[type="file"]{
+    display: none;
+}
+
+.perfil--imagen{
+    height: 200px;
+    width: 200px;
+    text-align: center;
+    border-radius: 50%;
+    overflow: hidden;
+}
+
+
+.perfil--datosPersonales{
+    width: 50%;
+}
+
+.perfil--picture{
+ 
+}
+.perfil--picture.active{
+    cursor: pointer;
+}
+.perfil--picture img{
+    height: 100%;
+}
+
 #editarPerfilModal label,
 #verPerfilModal label {
-    width: 100%; /* Ancho del 100% del contenedor */
     margin-bottom: 5px; /* Margen inferior para separar los elementos */
+    font-size: 12px;
 }
 
 #editarPerfilModal input,
@@ -278,6 +335,8 @@ main {
     border: 1px solid #ccc;
     border-radius: 4px;
     box-sizing: border-box;
+    outline: none;
+    
 }
 
 #editarPerfilModal .botones,
@@ -293,8 +352,13 @@ main {
 }
 
 /* Estilos generales para los botones */
+.botonActualizarPerfil{
+    width: auto;
+}
+
 button[type="submit"],
-button[type="button"] {
+button[type="button"],
+input[type="submit"] {
     background-color: #4CAF50;
     color: white;
     padding: 10px 20px;
@@ -307,7 +371,8 @@ button[type="button"] {
 }
 
 button[type="submit"]:hover,
-button[type="button"]:hover {
+button[type="button"]:hover,
+input[type="submit"]:hover {
     background-color: #45a049;
 }
 
@@ -448,6 +513,7 @@ button[type="button"]:hover {
     display: flex;
     flex-direction: column;
     align-items: center;
+
 }
 
 #productModal img {

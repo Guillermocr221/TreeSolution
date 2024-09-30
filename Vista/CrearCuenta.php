@@ -11,6 +11,10 @@
     <div class="container">
         <h1>¿Eres nuevo en TreeSolution?</h1>
         <p>Regístrate y disfruta de nuestros beneficios y una experiencia de compra más rápida y sencilla</p>
+        <?php 
+            include __DIR__."/bases/alertas.php";
+        ?>
+        
         <form id="registrationForm" method="POST">
             <label for="nombre">Nombre</label>
             <input type="text" id="nombre" name="nombre" required>
