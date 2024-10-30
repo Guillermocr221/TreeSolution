@@ -10,9 +10,6 @@ use Controllers\PaginasController;
 use Controllers\LoginController;
 use Controllers\AdminController;
 
-//Metodo para obtener todos los productos de la db
-// $productos = Producto::all();
-// debuguear($productos) ; 
 
 $router = new Router();
 
@@ -31,13 +28,24 @@ $router->get('/registrarse',[LoginController::class, 'CrearCuenta']);
 $router->post('/registrarse',[LoginController::class, 'CrearCuenta']);
 
 $router->get('/admin', [AdminController::class, 'index']);
+$router->post('/admin/registrarProducto',[AdminController::class, 'añadirProducto']);
+$router->post('/admin/registrarAdmin',[AdminController::class, 'agregarAdmin']);
+$router->post('/admin/modificarProducto',[AdminController::class, 'modificarProducto']);
+
 
 
 // API 
 $router->get('/api/productos',[APIController::class, 'index']);
+$router->get('/api/categorias',[APIController::class, 'categorias']);
+
 $router->post('/api/pedido', [APIController::class, 'crearPedido']);
 $router->post('/api/borrarUsuario', [APIController::class, 'eliminarUsuario']);
 $router->post('/api/activarUsuario', [APIController::class, 'activarUsuario']);
+
+$router->post('/api/obtenerProducto', [APIController::class, 'obtenerProducto']);
+$router->post('/api/eliminarProducto', [APIController::class, 'eliminarProducto']);
+$router->post('/api/comprobarDisponibilidad', [APIController::class, 'comprobarDisponibilidad']);
+
 
 // $router->get('/api/imprimirProducto',[AdminController::class, 'obtenerVentas']);
 

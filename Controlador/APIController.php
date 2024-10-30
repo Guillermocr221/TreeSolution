@@ -6,6 +6,8 @@ use Model\Ventas;
 use Model\Cliente;
 use Model\Detalleventa;
 use Model\User;
+use Model\Categoria;
+
 
 class APIController{
 
@@ -14,12 +16,19 @@ class APIController{
         echo json_encode($productos);
     }
 
+    public static function categorias(){
+        $categorias = Categoria::all();
+        echo json_encode($categorias);
+    }   
+
     public static function crearPedido(){
         session_start();
+        // Para usar postman:
+        // $json = file_get_contents('php://input');
+        // $data = json_decode($json, true);
+        // $productosVenta = $data['productos'];
+        //$productosVenta = json_decode($data, true);
 
-        //? $_POST = [ 'productos'=> [ {"nombre "=> ropa, "cantidad" => 2, "precioUnitario" => 22.5 }, ... ] , 
-        //?            'total' = PrecioTotal
-        //?          ];
         $venta = new Ventas($_POST);
 
         if ( isset($_SESSION['id'])) {
@@ -38,14 +47,10 @@ class APIController{
 
         $resultado = $venta->guardar();
 
-        //*Guardar detalles del pedido
+        // *Guardar detalles del pedido
         $productosVenta = json_decode($_POST['productos'], true);
-        // ? $productosVenta  = [ 
-        // ?                     [ "nombre" => 'ropa' , "cantidad" => 3, "precioUnitario" => 22.5, "idproducto" = 1 ],
-        // ?                     [ "nombre" => 'zapatos' , "cantidad" => 2, "precioUnitario" => 30, "idproducto" = 2 ] , ...]
-        
+
         foreach( $productosVenta as $producto){
-            $nombreProducto = $producto['nombre'];
             $ID_Venta = $resultado['id'];
             $ID_Producto = $producto['idproducto'];
             $cantidad = $producto['cantidad'];
@@ -59,13 +64,13 @@ class APIController{
                 'precio_Unitario'=> $precio_Unitario, 
                 'subtotal'=>$subtotal
             ];
-            
+
+            Producto::reducirStock($ID_Producto, $cantidad);
             $productoAventa = new Detalleventa($args);
             $productoAventa->guardar();
         }
+        echo json_encode(['resultado' =>  $resultado]);
 
-
-        echo json_encode(['resultado' => $resultado]);
     }
     
     public static function eliminarUsuario(){
@@ -87,4 +92,58 @@ class APIController{
 
         header('Location: /admin');
     }
+
+    public static function agregarProducto(){
+        $datosProducto = $_POST;
+
+        $nuevoProducto = new Producto($_POST);
+
+        debuguear($nuevoProducto);
+    }
+
+    public static function obtenerProducto(){
+
+        if($_SERVER['REQUEST_METHOD'] == 'POST'){
+            $id_Producto = $_POST['id_Producto'];
+            $producto = Producto::where('ID_Producto', $id_Producto);
+            echo json_encode($producto);
+
+        }
+    }
+    
+    public static function eliminarProducto(){
+        if($_SERVER['REQUEST_METHOD'] == 'POST'){
+            $id_Producto = $_POST['id_Producto'];
+
+            $query = "UPDATE productos SET estado = 'deshabilitado' WHERE ID_Producto = '$id_Producto' " ;
+
+            $resultado = Producto::SQL($query);
+
+            if($resultado){
+                header('Location: /admin?estado=eliminacionExitosa');
+                
+            }
+            
+            
+        }
+    }
+    public static function comprobarDisponibilidad(){
+        
+        if($_SERVER['REQUEST_METHOD'] == 'POST'){
+            $id_Producto = $_POST['idProducto'];
+            $cantidadSolicitada = (int) $_POST['cantidadSolicitada'];
+
+            $producto = Producto::where('ID_Producto', $id_Producto);
+            $cantidadDisponible = (int) $producto->stock;
+
+
+            // Verificar la cantidad disponible
+            if($cantidadSolicitada > $cantidadDisponible){
+                echo json_encode(['disponible' => false]);
+            } else {
+                echo json_encode(['disponible' => true]);
+            }
+        }
+    }
+
 }

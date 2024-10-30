@@ -42,7 +42,6 @@
                                                     } 
                                                     ?>" >
             <div class="dropdown-menu" id="userMenu">
-                <a id="editarPerfil" style="display: none;">Editar perfil</a>
                 <a id="verPerfil">Ver perfil</a>
                 <a href="/logout" id="logout">Cerrar sesión</a>
             </div>
@@ -53,83 +52,84 @@
         </div>
     </header>
     
-<!-- HTML para el overlay -->
-<div id="overlay"></div>
-<?php 
+    <!-- HTML para el overlay -->
+    <div id="overlay"></div>
+    <?php 
 
-    // debuguear($usuario);
-?>     
-<!-- HTML para el modal de Ver Perfil -->
-<div class="modal" id="verPerfilModal">
-    <div class="modal-content">
-        <span class="close" id="closeVerPerfilModal">&times;</span>
-        <h2 class="titulo__verPerfil">Ver Perfil</h2>
-        <h2 class="titulo__editarPerfil ">Editar Perfil</h2>                                       
-        <form id="verPerfilForm" method="POST" enctype="multipart/form-data">
+        // debuguear($usuario);
+    ?>     
+    <!-- HTML para el modal de Ver Perfil -->
+    <div class="modal" id="verPerfilModal">
+        <div class="modal-content">
+            <span class="close" id="closeVerPerfilModal">&times;</span>
+            <h2 class="titulo__verPerfil">Ver Perfil</h2>
+            <h2 class="titulo__editarPerfil ">Editar Perfil</h2>   
+                                                
+            <form id="verPerfilForm" method="POST" enctype="multipart/form-data">
 
-            <div class="div1--perfil">
+                <div class="div1--perfil">
 
-                <div class=" perfil--imagen">
-                    <input type="file" name="imagen" id="profile_image" accept="image/*">
+                    <div class=" perfil--imagen">
+                        <input type="file" name="imagen" id="profile_image" accept="image/*">
 
-                    <picture class="perfil--picture">
-                        <?php 
-                            $nombreImagen =$usuario->imagen;
-                        ?>
-                        <img id="imagenVistaPrevia" src='/imagenes/uploads/<?php echo $nombreImagen; ?>' alt="Imagen de usuario">
-                    </picture>                                                                 
-                </div>                                            
+                        <picture class="perfil--picture">
+                            <?php 
+                                $nombreImagen =$usuario->imagen;
+                            ?>
+                            <img id="imagenVistaPrevia" src='/imagenes/uploads/<?php echo $nombreImagen; ?>' alt="Imagen de usuario">
+                        </picture>                                                                 
+                    </div>                                            
 
-                <fieldset class="perfil__div perfil--datosPersonales">
+                    <fieldset class="perfil__div perfil--datosPersonales">
+                        
+                        <legend>Datos Personales</legend> 
                     
-                    <legend>Datos Personales</legend> 
-                
-                    <label for="nombres">Nombres:</label>
-                    <input type="text" id="nombres" name="nombre" value ='<?php echo $usuario->nombre ?>' readonly>
-                    
-                    <label for="apellidos">Apellidos:</label>
-                    <input type="text" id="apellidos" name="apellido" value='<?php echo $usuario->apellido ?>' readonly>
-                    
-                    <label for="dni">DNI:</label>
-                    <input type="text" id="edad" name="dni" value='<?php echo $usuario->dni ?>' readonly maxlength="8"> 
-                </fieldset>       
-            </div>                                        
+                        <label for="nombres">Nombres:</label>
+                        <input type="text" id="nombres" name="nombre" value ='<?php echo $usuario->nombre ?>' readonly>
+                        
+                        <label for="apellidos">Apellidos:</label>
+                        <input type="text" id="apellidos" name="apellido" value='<?php echo $usuario->apellido ?>' readonly>
+                        
+                        <label for="dni">DNI:</label>
+                        <input type="text" id="edad" name="dni" value='<?php echo $usuario->dni ?>' readonly maxlength="8"> 
+                    </fieldset>       
+                </div>                                        
 
-            <fieldset class="perfil__div perfil--contacto">
+                <fieldset class="perfil__div perfil--contacto">
+                    
+                    <legend>Contacto</legend> 
                 
-                <legend>Contacto</legend> 
-            
-                <label for="correo">Correo:</label>
-                <input type="email" id="correo" name="email" value='<?php echo $usuario->email?>' readonly>
+                    <label for="correo">Correo:</label>
+                    <input type="email" id="correo" name="email" value='<?php echo $usuario->email?>' readonly>
+                    
+                    <label for="celular">Celular:</label>
+                    <input type="text" id="celular" name="telefono" value='<?php echo $usuario->telefono?>' readonly maxlength="9">
+                </fieldset>
                 
-                <label for="celular">Celular:</label>
-                <input type="text" id="celular" name="telefono" value='<?php echo $usuario->telefono?>' readonly maxlength="9">
-            </fieldset>
-            
-            <fieldset class="perfil__div perfil--direccion">
+                <fieldset class="perfil__div perfil--direccion">
+                    
+                    <legend>Dirección </legend> 
                 
-                <legend>Dirección </legend> 
-            
-                <label for="pais">País:</label>
-                <input type="text" id="pais" name="pais" value="Peru" readonly>
+                    <label for="pais">País:</label>
+                    <input type="text" id="pais" name="pais" value="Peru" readonly>
+                    
+                    <label for="provincia">Provincia:</label>
+                    <input type="text" id="provincia" name="provincia" value="Lima" readonly>
+                    
+                    <label for="distrito">Distrito:</label>
+                    <input type="text" id="distrito" name="distrito" value="SMP" readonly>
+                    
+                    <label for="direccion">Dirección:</label>
+                    <input type="text" id="direccion" name="direccion" value="CALLE X LOTE 5 URB X MZ X" readonly>
+                </fieldset>
                 
-                <label for="provincia">Provincia:</label>
-                <input type="text" id="provincia" name="provincia" value="Lima" readonly>
-                
-                <label for="distrito">Distrito:</label>
-                <input type="text" id="distrito" name="distrito" value="SMP" readonly>
-                
-                <label for="direccion">Dirección:</label>
-                <input type="text" id="direccion" name="direccion" value="CALLE X LOTE 5 URB X MZ X" readonly>
-            </fieldset>
-            
-            <div class="botones">
-                <button type="button" id="modificarPerfilBtn" >Modificar</button>
-                <button type="submit" class="botonActualizarPerfil" style="display: none;">Actualizar Datos</button>
-            </div>
-        </form>
+                <div class="botones">
+                    <button type="button" id="modificarPerfilBtn" >Modificar</button>
+                    <button type="submit" class="botonActualizarPerfil" style="display: none;">Actualizar Datos</button>
+                </div>
+            </form>
+        </div>
     </div>
-</div>
 
     <h1 class="titulo" id="tituloAnimado">
         Bienvenido a nuestra tienda de ventas
@@ -147,10 +147,10 @@
           <button class="nextBtn"><img src="/imagenes/right-arrow.png" alt="Next"></button>
         </div>
         <div class="dots-container"></div>
-      </div>
+    </div>
 
     
-      <main class="container">
+    <main class="container">
         <div class="sort-container">
             <label for="sortOptions">Ordenar por:</label>
             <select id="sortOptions">
@@ -160,92 +160,9 @@
             </select>
         </div>
 
-        <div id="productList" class="product-list">
-            <div class="product" data-id= 1 data-name="Polo deportivo azul" data-price="49.90">
-                <img src="/imagenes/producto1.jpg" alt="Polo deportivo azul">
-                <div class="info">
-                    <h3>GENÉRICO</h3>
-                    <p>Polo deportivo azul</p>
-                    <p>Por tienda y delivery</p>
-                    <p>S/ 49.90</p>
-                </div>
-            </div>
-            <div class="product" data-id= 2 data-name="Polo deportivo negro" data-price="49.90">
-                <img src="/imagenes/producto2.jpg" alt="Polo deportivo negro">
-                <div class="info">
-                    <h3>Nike</h3>
-                    <p>Polo deportivo negro</p>
-                    <p>Por delivery</p>
-                    <p class="price">
-                        <span class="discount">S/ 34.90</span>
-                        <span class="original-price">S/ 49.90</span>
-                    </p>
-                </div>
-            </div>
-            <div class="product" data-id= 3 data-name="Short deportivo negro" data-price="42">
-                <img src="/imagenes/producto3.jpg" alt="Short deportivo negro">
-                <div class="info">
-                    <h3>Puma</h3>
-                    <p>Short deportivo negro</p>
-                    <p>Por tienda y delivery</p>
-                    <p>S/ 42</p>
-                </div>
-            </div>
-            <div class="product" data-id= 4 data-name="Casaca Hombre azul" data-price="119.90">
-                <img src="/imagenes/producto4.jpg" alt="Casaca Hombre azul">
-                <div class="info">
-                    <h3>BEARCLIFF</h3>
-                    <p>Casaca Hombre azul</p>
-                    <p>Por tienda</p>
-                    <p>S/ 119.90</p>
-                </div>
-            </div>
-            <div class="product" data-id= 5 data-name="Zapatilla runner" data-price="129.90">
-                <img src="/imagenes/producto5.jpg" alt="Zapatilla runner">
-                <div class="info">
-                    <h3>GENÉRICO</h3>
-                    <p>Zapatilla runner</p>
-                    <p>Por delivery</p>
-                    <p class="price">
-                        <span class="discount">S/ 129.90</span>
-                        <span class="original-price">S/ 139.90</span>
-                    </p>
-                </div>
-            </div>
-            <div class="product" data-id= 6 data-name="Zapatilla runner blanca" data-price="159.90">
-                <img src="/imagenes/producto6.jpg" alt="Zapatilla runner blanca">
-                <div class="info">
-                    <h3>GENÉRICO</h3>
-                    <p>Zapatilla runner blanca</p>
-                    <p>Por tienda y delivery</p>
-                    <p class="price">
-                        <span class="discount">S/ 159.90</span>
-                        <span class="original-price">S/ 189.90</span>
-                    </p>
-                </div>
-            </div>
-            <div class="product" data-id= 7 data-name="Casaca roja para mujer" data-price="120">
-                <img src="/imagenes/producto7.jpg" alt="Casaca roja para mujer">
-                <div class="info">
-                    <h3>GENÉRICO</h3>
-                    <p>Casaca roja para mujer</p>
-                    <p>Por tienda</p>
-                    <p>S/ 120</p>
-                </div>
-            </div>
-            <div class="product" data-id= 8 data-name="Conjunto deportivo para mujer" data-price="179.90">
-                <img src="/imagenes/producto8.jpg" alt="Conjunto deportivo para mujer">
-                <div class="info">
-                    <h3>MANGO</h3>
-                    <p>Conjunto deportivo para mujer</p>
-                    <p>Por tienda y delivery</p>
-                    <p class="price">
-                        <span class="discount">S/ 179.90</span>
-                        <span class="original-price">S/ 200.90</span>
-                    </p>
-                </div>
-            </div>
+        <div id="productList" class="product-list">                   
         </div>
+    
     </main>
 
 
@@ -261,6 +178,7 @@
             <button id="addToCart">Añadir</button>
         </div>
     </div>
+    
     <div id="cartModal" class="modal">
         <div class="modal-content">
             <img id="modalImage" src="/imagenes/comprando.jpg" alt="Car Image" style="width: 240px; height: 240px;">
@@ -293,8 +211,7 @@
 
 	</script>
 							
-    <script src="/scripts/Dashboard2.js"></script>
-    <script src="/scripts/payPal.js"></script>
+    <script type="module" src="/scripts/Dashboard2.js"></script>
 
 </body>
 </html>

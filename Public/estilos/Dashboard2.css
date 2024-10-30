@@ -23,11 +23,18 @@ main {
 
 .header {
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
     justify-content: space-between;
     background-color: #fff;
     padding: 10px 20px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+@media (200px < width <= 425px ) {
+    .header{
+       gap: 1rem;
+    }
 }
 
 .header__logo {
@@ -126,14 +133,17 @@ main {
 .container {
     display: flex;
     flex-wrap: wrap;
+    flex-direction: column;
     justify-content: center;
     padding: 20px;
+    width: min(1000px,80%);
+    margin: auto;
 }
 
 /* Estilos de productos */
 .product-list {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     gap: 20px;
     margin-top: 20px;
 }
@@ -143,6 +153,7 @@ main {
     padding: 15px;
     background-color: #fff;
     transition: transform 0.3s, box-shadow 0.3s;
+    height: 400px;
 }
 
 .product:hover {

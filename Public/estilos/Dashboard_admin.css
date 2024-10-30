@@ -97,9 +97,49 @@ body {
 .user-table td, .product-table td, .employee-table td {
     border: 1px solid #ddd;
     padding: 8px;
-    text-align: left;
+    /* text-align: left; */
 }
 
+.product-table.product--td tr{
+    padding: 0px;
+}
+
+.material-symbols-outlined{
+    padding: 9px;
+    border: solid 1px black;
+    border-radius: 50%;
+    color: black;
+    cursor: pointer;
+    user-select: none;
+    transition: transform .3s ease;
+
+}
+.symbol--editar{
+    background-color: rgb(127, 241, 127);
+}
+.symbol-borrar{
+    background-color: rgb(241, 127, 127);
+}
+
+.material-symbols-outlined:hover{
+    transform: scale(1.2);
+    transition: transform .4s ease;
+}
+
+
+.admin_celda--accion{
+    
+}
+.centrar{
+    text-align: center;
+}
+
+.product-table td.tdimg{
+    text-align: center;
+}
+.user-table td img, .product-table td img, .employee-table td img{
+    width: 100px;
+}
 .user-table th, .product-table th, .employee-table th {
     background-color: #f2f2f2;
     font-weight: bold;
@@ -199,4 +239,193 @@ body {
 .th__accion{
     width: 120px;
 
+}
+#overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8); /* Color semitransparente */
+    display: none; /* Oculto por defecto */
+    z-index: 1000; /* Asegúrate de que esté por encima de otros elementos */
+}
+
+
+/* Modal Styles */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1001; /* Asegura que el modal esté encima de todo */
+    left: 50%; /* Centra horizontalmente */
+    top: 50%; /* Centra verticalmente */
+    transform: translate(-50%, -50%); /* Centra el modal */
+    width: 80%; /* Ancho del modal */
+    max-width: 600px;
+    max-height: 95%;
+    background-color: white; /* Fondo blanco */
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombra */
+    padding: 10px;
+    overflow-y: auto; /* Permite desplazamiento vertical si el contenido es demasiado largo */
+}
+
+.modal-content {
+    background-color: white;
+    margin: auto; /* Sin margen */
+    padding: 10px; /* Espaciado interno */
+    border: none; /* Sin borde */
+    border-radius: 5px;
+    box-shadow: none; /* Sin sombra */
+    width: 90%; /* Asegura que el contenido ocupe todo el ancho disponible */
+}
+
+.close {
+    color: #aaa;
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+#addProductModal form {
+    display: flex;
+    flex-direction: column;
+    width: 100%; /* Asegura que el formulario ocupe todo el ancho disponible */
+}
+
+.div1--product,
+.div1--admin{
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+    justify-content: center;
+    align-items: center;
+}
+
+.product__div,
+.admin__div{
+    margin: 10px 0;
+    border: 1px solid lightgrey;
+}
+
+input[type="file"]{
+    display: none;
+}
+
+.product--imagen,
+.admin--imagen{
+    height: 200px;
+    width: 200px;
+    text-align: center;
+    border-radius: 50%;
+    overflow: hidden;
+    position: relative;
+    cursor: pointer;
+    border: solid 1px black;
+}
+
+
+.product--datos,
+.admin--datos{
+    width: 50%;
+}
+
+.product--picture img,
+.admin--picture img{
+    position: absolute;
+    top: 50%;         
+    left: 50%;
+    transform: translate(-50%, -50%); 
+    height: 80%;
+    width: auto; 
+    object-fit: cover;
+}
+
+#addProductModal label,
+#addAdminModal label,
+#modificarProductModal label {
+    margin-bottom: 5px; 
+    font-size: 12px;
+}
+
+#addProductModal input,
+#addProductModal select,
+#addAdminModal input,
+#modificarProductModal input,
+#modificarProductModal select {
+    width: 100%; 
+    padding: 8px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    outline: none;
+    
+}
+
+#addProductModal .botones,
+#addAdminModal .botones,
+#modificarProductModal .botones {
+    width: 100%;
+    text-align: center;
+    margin-top: 10px;
+}
+
+#addProductModal .botones button,
+#addAdminModal .botones button,
+#modificarProductModal .botones button {
+    margin: 0 5px;
+}
+
+button[type="submit"],
+button[type="button"],
+input[type="submit"] {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 10px;
+    justify-content: center;
+    align-items: center;
+}
+
+button[type="submit"]:hover,
+button[type="button"]:hover,
+input[type="submit"]:hover {
+    background-color: #45a049;
+}
+
+
+/* Para Chrome, Safari, Edge, y Opera */
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Para Firefox */
+input[type="number"] {
+    -moz-appearance: textfield;
+}
+
+.botones {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px; /* Espacio entre el contenido y los botones */
+}
+
+.botones button {
+    margin: 0 10px; /* Espacio entre los botones */
 }

@@ -1,4 +1,6 @@
 
+import {functionEnviarPedido, precioTotalProductos} from './carrito.js';
+
 
 
 paypal.Buttons({
@@ -25,14 +27,8 @@ paypal.Buttons({
         console.log('Tasa de cambio PEN a USD:', tasa);
     
 
-        var totalPedido = document.getElementById("totalPrice");
-        let stringPrecioTotal;
-        let precioACobrar;
-        stringPrecioTotal = totalPedido.textContent;
-        precioACobrar = parseFloat(stringPrecioTotal.match(/[0-9]+\.[0-9]+/)[0]);
-        
-         // Calcular el precio en dólares (dividiendo por la tasa de cambio)
-        let precioEnDolares = (precioACobrar / tasa).toFixed(2);
+        var totalPedido = precioTotalProductos();
+        let precioEnDolares = (totalPedido / tasa).toFixed(2);
         
         return actions.order.create({
             purchase_units: [{
