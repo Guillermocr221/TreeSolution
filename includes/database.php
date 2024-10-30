@@ -3,11 +3,11 @@
 function conectarDb(): mysqli
 {
     $db = new mysqli(
-        "localhost","root","root","treesolutiondb"
+        "mysql-treesolutions.alwaysdata.net","377640","treesolutionsunmsm","treesolutions_db" 
     );
 
     // "mysql-treesolutions.alwaysdata.net","377640","treesolutionsunmsm","treesolutions_db"
-
+    // "localhost","root","root","treesolutiondb"
     $db->set_charset('utf8');
 
     if (!$db) {
