@@ -30,7 +30,7 @@ Este proyecto utiliza PHP8 del lado del servidor para poder conectar a una DB al
 - Descargar apache del siguiente link: https://www.apachelounge.com/download/
 - Una vez descargado el zip, extraer el archivo "Apache24" y pegar en disco C.
 - Renombrar carpeta como "apache".
-- Buscar en la carpeta el archivo "httpd.conf" y abrir con VScode para editarlo
+- Buscar en la carpeta conf el archivo "httpd.conf" y abrir con VScode para editarlo
 - Linea 37: cambiar la direccion del SRVROOT a "c:/apache".
 - Linea 227: Descomentar ServerName y cambiar el "www.example.com:80" por "localhost".
 - Guardar.
