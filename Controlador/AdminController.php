@@ -38,6 +38,7 @@ class AdminController {
 
     }
 
+    
     public static function obtenerVentas(){
 
         // Consultar la base de datos
