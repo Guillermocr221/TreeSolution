@@ -16,12 +16,6 @@ class APIController{
         $productos = Producto::all();
         echo json_encode($productos);
     }
-    public static function card(){
-        header('Access-Control-Allow-Origin: *');
-        $codigoTarjeta = 1234956;
-        echo json_encode($codigoTarjeta);
-    }
-
 
     public static function categorias(){
         $categorias = Categoria::all();
