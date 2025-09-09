@@ -1,1 +1,10 @@
 acc.txt
+node_modules/
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
+/tests
+/tests-examples
+/nbproject
+/vendor

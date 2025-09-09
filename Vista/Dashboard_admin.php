@@ -246,7 +246,7 @@
                             <tr>
                                 <td class="id_producto"><?php echo $producto->ID_Producto; ?></td>
                                 <td class="tdimg"><img src="/imagenes/store/<?php echo $producto->imagen ?>" alt="ImgP"></td>
-                                <td><?php echo $producto->nombre; ?></td>
+                                <td class="nombreProducto"><?php echo $producto->nombre; ?></td>
                                 <td class="centrar"><?php echo $producto->stock; ?></td>
                                 <td >S/.<?php echo $producto->precio; ?></td>
                                 <td class="centrar">

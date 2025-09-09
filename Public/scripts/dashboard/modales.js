@@ -1,4 +1,3 @@
-
 document.addEventListener("DOMContentLoaded", function() {
     
   //? MODAL VER PERFIL/EDITAR PERFIL
@@ -87,7 +86,8 @@ document.addEventListener("DOMContentLoaded", function() {
             verPerfilModal.style.display = 'none';
             overlay.style.display = 'none';
             document.body.style.overflow = ''; // Restablecer el desplazamiento del cuerpo al cerrar el modal
-        }
+            productModal.style.display = 'none';
+          }
     });
   
     // Función para cerrar los modales al presionar la tecla Escape
@@ -123,7 +123,137 @@ document.addEventListener("DOMContentLoaded", function() {
             reader.readAsDataURL(archivo); // Leer el archivo como Data URL
         }
     });
-  });
+
+    //? MODAL DE PRODUCTO DETALLADO
+    const productModal = document.getElementById('productModal');
+    const closeProductModal = productModal.querySelector('.close');
+    const quantityDisplay = document.getElementById('quantity');
+    const decreaseBtn = document.getElementById('decreaseQuantity');
+    const increaseBtn = document.getElementById('increaseQuantity');
+    const addToCartBtn = document.getElementById('addToCart');
+    const colorSelect = document.getElementById('modalColorSelect');
+    const sizeSelect = document.getElementById('modalSizeSelect');
+    const addToCartText = document.getElementById('addToCartText');
+    const modalPrice = document.getElementById('modalPrice');
+
+    let currentQuantity = 1;
+    let currentProductData = null;
+
+    // Funciones para controlar la cantidad
+    decreaseBtn.addEventListener('click', function() {
+        if (currentQuantity > 1) {
+            currentQuantity--;
+            updateQuantityDisplay();
+        }
+    });
+
+    increaseBtn.addEventListener('click', function() {
+        currentQuantity++;
+        updateQuantityDisplay();
+    });
+
+    function updateQuantityDisplay() {
+        quantityDisplay.textContent = currentQuantity;
+        updateAddToCartButton();
+    }
+
+    function updateAddToCartButton() {
+        if (currentProductData) {
+            const totalPrice = (parseFloat(currentProductData.price) * currentQuantity).toFixed(2);
+            addToCartText.innerHTML = `Agregar al carrito - S/ <span id="precioProdcuto">${totalPrice}<span>`;
+        }
+    }
+
+    // Función para validar si se puede agregar al carrito
+    function canAddToCart() {
+        const hasColor = colorSelect.value !== '';
+        const hasSize = sizeSelect.value !== '';
+        
+        // Si hay opciones disponibles, deben estar seleccionadas
+        const colorOptions = colorSelect.querySelectorAll('option:not([value=""])');
+        const sizeOptions = sizeSelect.querySelectorAll('option:not([value=""])');
+        
+        const needsColor = colorOptions.length > 0;
+        const needsSize = sizeOptions.length > 0;
+        
+        return (!needsColor || hasColor) && (!needsSize || hasSize);
+    }
+
+    // Event listeners para las selecciones
+    colorSelect.addEventListener('change', function() {
+        addToCartBtn.disabled = !canAddToCart();
+    });
+
+    sizeSelect.addEventListener('change', function() {
+        addToCartBtn.disabled = !canAddToCart();
+    });
+
+    // Función para configurar el modal cuando se abre
+    function setupProductModal(productData) {
+        currentProductData = productData;
+        currentQuantity = 1;
+        
+        // Resetear selecciones
+        colorSelect.value = '';
+        sizeSelect.value = '';
+        
+        // Actualizar displays
+        updateQuantityDisplay();
+        
+        // Validar estado inicial del botón
+        addToCartBtn.disabled = !canAddToCart();
+        
+        // Actualizar precio en el modal
+        modalPrice.textContent = `S/ ${parseFloat(productData.price).toFixed(2)}`;
+    }
+
+    // // Event listener para agregar al carrito desde el modal
+    // addToCartBtn.addEventListener('click', function() {
+    //     if (currentProductData && canAddToCart()) {
+    //         const productToAdd = {
+    //             id: currentProductData.id,
+    //             name: currentProductData.name,
+    //             price: parseFloat(currentProductData.price),
+    //             image: currentProductData.image,
+    //             quantity: currentQuantity,
+    //             color: colorSelect.value || null,
+    //             size: sizeSelect.value || null
+    //         };
+
+    //         // Importar y usar la función addToCart del módulo carrito
+    //         import('./carrito.js').then(carritoModule => {
+    //             carritoModule.addToCart(productToAdd);
+                
+    //             // Mostrar mensaje de éxito
+    //             Swal.fire({
+    //                 icon: 'success',
+    //                 title: '¡Producto agregado!',
+    //                 text: `${productToAdd.name} se agregó al carrito`,
+    //                 timer: 2000,
+    //                 showConfirmButton: false
+    //             });
+                
+    //             // Cerrar modal
+    //             closeProductModal.click();
+    //         });
+    //     }
+    // });
+
+    // Función para cerrar el modal de producto
+    closeProductModal.addEventListener('click', function() {
+        productModal.style.display = 'none';
+        overlay.style.display = 'none';
+        document.body.style.overflow = '';
+        
+        // Resetear estado del modal
+        currentProductData = null;
+        currentQuantity = 1;
+        colorSelect.value = '';
+        sizeSelect.value = '';
+    });
+
+    // Exponer la función para que pueda ser usada desde productos.js
+    window.setupProductModal = setupProductModal;
+});
 
 
-  

@@ -44,7 +44,7 @@ class Producto extends ActiveRecord{
         $resultado = self::$db->query($query);
         return $resultado;
     }
-
+    
     public static function reducirStock($id, $cantidad){
        
         $producto = self::where('ID_Producto', $id);

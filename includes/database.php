@@ -3,7 +3,7 @@
 function conectarDb(): mysqli
 {
     $db = new mysqli(
-        "mysql-treesolutions.alwaysdata.net","377640","treesolutionsunmsm","treesolutions_db" 
+        "mysql-treesolutions.alwaysdata.net","377640","treesolutionsunmsm","treesolutions_db"
     );
 
     // "mysql-treesolutions.alwaysdata.net","377640","treesolutionsunmsm","treesolutions_db"
@@ -17,5 +17,5 @@ function conectarDb(): mysqli
         exit;
     }
 
-    return $db;
+    return $db; 
 }

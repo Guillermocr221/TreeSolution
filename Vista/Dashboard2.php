@@ -151,43 +151,249 @@
 
     
     <main class="container">
-        <div class="sort-container">
-            <label for="sortOptions">Ordenar por:</label>
-            <select id="sortOptions">
-                <option value="default">Seleccione</option>
-                <option value="name">Nombre</option>
-                <option value="price">Precio</option>
-            </select>
-        </div>
-
+        <!-- El contenedor sort-container se ha removido ya que ahora está integrado en el catálogo -->
         <div id="productList" class="product-list">                   
         </div>
-    
     </main>
 
 
-    <div id="productModal" class="modal">
+    <div id="productModal" class="modal product-detail-modal">
         <div class="modal-content">
             <span class="close">&times;</span>
-            <img id="modalImage" src="" alt="Product Image">
-            <h3 id="modalName">Producto:</h3>
-            <p id="modalPrice">Precio: S/ 0.00</p>
-            <p id="modalColors">Tallas: S - M - L - XL</p>
-            <label for="quantity">Cantidad: </label>
-            <input type="number" id="quantity" name="quantity" min="1" value="1">
-            <button id="addToCart">Añadir</button>
+            
+            <div class="product-detail-header">
+                <h1 class="product-detail-title" id="modalName">Producto</h1>
+            </div>
+
+            <div class="product-detail-content">
+                <!-- Imagen del producto -->
+                <div class="product-detail-image-container">
+                    <div class="product-detail-image-wrapper">
+                        <img id="modalImage" src="" alt="Product Image" class="product-detail-image">
+                        <div class="product-detail-badge">TreeSolution</div>
+                    </div>
+                </div>
+
+                <!-- Detalles del producto -->
+                <div class="product-detail-info">
+                    <div class="product-detail-rating-section">
+                        <div class="product-detail-rating">
+                            <div class="product-detail-stars">
+                                <svg class="product-detail-star" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                                </svg>
+                                <svg class="product-detail-star" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                                </svg>
+                                <svg class="product-detail-star" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                                </svg>
+                                <svg class="product-detail-star" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                                </svg>
+                                <svg class="product-detail-star empty" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                                </svg>
+                            </div>
+                            <span class="product-detail-rating-number">4.5</span>
+                            <span class="product-detail-reviews">(120 reseñas)</span>
+                        </div>
+                        <div class="product-detail-price" id="modalPrice">S/ 0.00</div>
+                    </div>
+
+                    <div class="product-description-section">
+                        <h3>Descripción</h3>
+                        <p class="product-description" id="productDescription">
+                            Descubre la excelencia en equipamiento deportivo con este producto de TreeSolution. 
+                            Diseñado para atletas que buscan rendimiento y comodidad excepcionales. Con tecnología 
+                            avanzada y materiales de primera calidad, este producto te ayudará a alcanzar tus objetivos deportivos.
+                        </p>
+                    </div>
+
+                    <div class="product-features-section">
+                        <h3>Características principales</h3>
+                        <ul class="product-features-list">
+                            <li class="product-feature-item">
+                                <div class="product-feature-bullet"></div>
+                                Materiales de alta calidad y durabilidad
+                            </li>
+                            <li class="product-feature-item">
+                                <div class="product-feature-bullet"></div>
+                                Diseño ergonómico para máximo confort
+                            </li>
+                            <li class="product-feature-item">
+                                <div class="product-feature-bullet"></div>
+                                Tecnología avanzada de rendimiento
+                            </li>
+                            <li class="product-feature-item">
+                                <div class="product-feature-bullet"></div>
+                                Resistente al desgaste y uso intensivo
+                            </li>
+                            <li class="product-feature-item">
+                                <div class="product-feature-bullet"></div>
+                                Garantía de satisfacción del fabricante
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="product-options-grid">
+                        <div class="product-option-group">
+                            <label class="product-option-label">Color</label>
+                            <select class="product-select" id="modalColorSelect">
+                                <option value="">Selecciona un color</option>
+                                <option value="negro">Negro</option>
+                                <option value="blanco">Blanco</option>
+                                <option value="azul">Azul</option>
+                                <option value="rojo">Rojo</option>
+                            </select>
+                        </div>
+
+                        <div class="product-option-group">
+                            <label class="product-option-label">Talla</label>
+                            <select class="product-select" id="modalSizeSelect">
+                                <option value="">Selecciona una talla</option>
+                                <option value="S">S</option>
+                                <option value="M">M</option>
+                                <option value="L">L</option>
+                                <option value="XL">XL</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="product-quantity-section">
+                        <label class="product-option-label">Cantidad</label>
+                        <div class="product-quantity-controls">
+                            <button type="button" class="quantity-control-btn" id="decreaseQuantity">-</button>
+                            <span class="quantity-display-large" id="quantity">1</span>
+                            <button type="button" class="quantity-control-btn" id="increaseQuantity">+</button>
+                        </div>
+                    </div>
+
+                    <!-- Botones de acción -->
+                    <div class="product-actions">
+                        <button id="addToCart" class="product-add-to-cart">
+                            <svg class="product-action-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+                                <line x1="3" y1="6" x2="21" y2="6"></line>
+                                <path d="m16 10-4 4-4-4"></path>
+                            </svg>
+                            <span id="addToCartText">Agregar al carrito - S/ 0.00</span>
+                        </button>
+
+                        <div class="product-secondary-actions">
+                            <button type="button" class="product-secondary-btn">
+                                <svg class="product-action-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                                </svg>
+                                Favoritos
+                            </button>
+                            <button type="button" class="product-secondary-btn">
+                                <svg class="product-action-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path>
+                                    <path d="M16 6l-4-4-4 4"></path>
+                                    <line x1="12" y1="2" x2="12" y2="15"></line>
+                                </svg>
+                                Compartir
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="product-guarantees">
+                        <p class="product-guarantee-item">✓ Envío gratis en pedidos superiores a S/ 100</p>
+                        <p class="product-guarantee-item">✓ Devoluciones gratuitas en 30 días</p>
+                        <p class="product-guarantee-item">✓ Garantía del fabricante incluida</p>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
     
     <div id="cartModal" class="modal">
-        <div class="modal-content">
-            <img id="modalImage" src="/imagenes/comprando.jpg" alt="Car Image" style="width: 240px; height: 240px;">
-            <span class="close">&times;</span>
-            <h3>Carrito de Compras</h3>
-            <ul id="cartItems"></ul>
-            <p id="totalPrice">Total: S/ 0.00</p>
-            <button id="checkout">Pagar</button>
-            <button id="cancel">Cancelar</button>
+        <div class="modal-content cart-modal-content">
+            <!-- Header del carrito -->
+            <div class="cart-header">
+                <div class="cart-header-left">
+                    <svg class="cart-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+                        <line x1="3" y1="6" x2="21" y2="6"></line>
+                        <path d="m16 10-4 4-4-4"></path>
+                    </svg>
+                    <h2 class="cart-title">Tu Carrito de Compras</h2>
+                </div>
+                <button class="close cart-close-btn" type="button">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+
+            <!-- Contenido scrolleable del carrito -->
+            <div class="cart-content">
+                <!-- Imagen de la tienda -->
+                <div class="store-banner">
+                    <img src="/imagenes/cart-background.jpg" alt="TreeSolution Store" class="store-image">
+                    <div class="store-overlay">
+                        <h3 class="store-name">TreeSolution - Tu Tienda de Confianza</h3>
+                    </div>
+                </div>
+
+                <!-- Lista de productos del carrito -->
+                <div class="cart-items-section">
+                    <div id="cartItemsContainer" class="cart-items-list">
+                        <!-- Los items se generarán dinámicamente aquí -->
+                    </div>
+                    
+                    <!-- Mensaje cuando el carrito está vacío -->
+                    <div id="emptyCartMessage" class="empty-cart" style="display: none;">
+                        <svg class="empty-cart-icon" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+                            <line x1="3" y1="6" x2="21" y2="6"></line>
+                            <path d="m16 10-4 4-4-4"></path>
+                        </svg>
+                        <p>Tu carrito está vacío</p>
+                    </div>
+                </div>
+
+                <!-- Resumen del pedido -->
+                <div id="orderSummary" class="order-summary" style="display: none;">
+                    <h3 class="summary-title">Resumen del Pedido</h3>
+                    <div class="summary-details">
+                        <div class="summary-row">
+                            <span>Subtotal</span>
+                            <span id="subtotalAmount">S/ 0.00</span>
+                        </div>
+                        <div class="summary-row">
+                            <span>Envío</span>
+                            <span id="shippingAmount">Gratis</span>
+                        </div>
+                        <div id="freeShippingNote" class="free-shipping-note" style="display: none;">
+                            ¡Envío gratis por compras superiores a S/ 100!
+                        </div>
+                        <div class="summary-divider"></div>
+                        <div class="summary-row summary-total">
+                            <span>Total</span>
+                            <span id="totalPrice" class="total-amount">S/ 0.00</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Botones de acción -->
+            <div id="cartActions" class="cart-actions" style="display: none;">
+                <button id="checkout" class="btn-primary btn-paypal" type="button">
+                    <svg class="btn-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect>
+                        <line x1="1" y1="10" x2="23" y2="10"></line>
+                    </svg>
+                    Pagar con PayPal
+                </button>
+                
+                <div class="cart-bottom-actions">
+                    <button id="cancel" class="btn-secondary" type="button">Continuar Comprando</button>
+                    <button id="finalizeOrder" class="btn-primary" type="button">Finalizar Compra</button>
+                </div>
+            </div>
         </div>
     </div>
 
