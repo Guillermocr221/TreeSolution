@@ -7,6 +7,7 @@ use Model\Producto;
 use Model\User;
 use Model\Ventas;
 use Model\ImpresionVenta;
+use Model\Categoria;
 
 class AdminController {
 
@@ -20,13 +21,15 @@ class AdminController {
             $productos = Producto::all();
             $usuarios = User::all();
             $ventas  = self::obtenerVentas();
+            $categorias = Categoria::all();
 
             if($_SESSION['admin'] == true){
 
                 $router->render('Dashboard_admin', [
                     'productos' => $productos,
                     'usuarios' => $usuarios,
-                    'ventas' => $ventas
+                    'ventas' => $ventas,
+                    'categorias' => $categorias
                 ]);     
 
             }else{
@@ -187,6 +190,33 @@ class AdminController {
 
         if($result){
             header('Location: /admin?estado=modProdExitoso');
+        }
+    }
+
+    public static function eliminarProducto(){
+        if($_SERVER['REQUEST_METHOD'] == 'POST'){
+            $idProducto = $_POST['ID_Producto'];
+            
+            // Cambiar estado a deshabilitado en lugar de eliminar
+            $query = "UPDATE productos SET estado = 'deshabilitado' WHERE ID_Producto = '$idProducto'";
+            $resultado = Producto::SQL($query);
+            
+            if($resultado){
+                header('Location: /admin?estado=elimProdExitoso');
+            }
+        }
+    }
+
+    public static function habilitarProducto(){
+        if($_SERVER['REQUEST_METHOD'] == 'POST'){
+            $idProducto = $_POST['ID_Producto'];
+            
+            $query = "UPDATE productos SET estado = 'habilitado' WHERE ID_Producto = '$idProducto'";
+            $resultado = Producto::SQL($query);
+            
+            if($resultado){
+                header('Location: /admin?estado=habProdExitoso');
+            }
         }
     }
 
