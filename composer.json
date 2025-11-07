@@ -8,5 +8,7 @@
             "Controllers\\" : "./Controlador"
         }
     },
-    "require": {}
+    "require": {
+        "phpmailer/phpmailer": "^6.10"
+    }
 }

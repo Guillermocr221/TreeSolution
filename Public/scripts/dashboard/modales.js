@@ -182,20 +182,31 @@ document.addEventListener("DOMContentLoaded", function() {
     // Event listeners para las selecciones
     colorSelect.addEventListener('change', function() {
         addToCartBtn.disabled = !canAddToCart();
+        // Opcional: Verificar disponibilidad específica cuando cambie la selección
+        verificarDisponibilidadEspecifica();
     });
 
     sizeSelect.addEventListener('change', function() {
         addToCartBtn.disabled = !canAddToCart();
+        // Opcional: Verificar disponibilidad específica cuando cambie la selección
+        verificarDisponibilidadEspecifica();
     });
 
     // Función para configurar el modal cuando se abre
-    function setupProductModal(productData) {
+    async function setupProductModal(productData) {
         currentProductData = productData;
         currentQuantity = 1;
         
         // Resetear selecciones
         colorSelect.value = '';
         sizeSelect.value = '';
+        
+        // Limpiar opciones existentes
+        colorSelect.innerHTML = '<option value="">Seleccionar color</option>';
+        sizeSelect.innerHTML = '<option value="">Seleccionar talla</option>';
+        
+        // Cargar colores y tallas disponibles
+        await cargarColoresYTallas(productData.id);
         
         // Actualizar displays
         updateQuantityDisplay();
@@ -207,37 +218,92 @@ document.addEventListener("DOMContentLoaded", function() {
         modalPrice.textContent = `S/ ${parseFloat(productData.price).toFixed(2)}`;
     }
 
-    // // Event listener para agregar al carrito desde el modal
-    // addToCartBtn.addEventListener('click', function() {
-    //     if (currentProductData && canAddToCart()) {
-    //         const productToAdd = {
-    //             id: currentProductData.id,
-    //             name: currentProductData.name,
-    //             price: parseFloat(currentProductData.price),
-    //             image: currentProductData.image,
-    //             quantity: currentQuantity,
-    //             color: colorSelect.value || null,
-    //             size: sizeSelect.value || null
-    //         };
+    // Función para cargar colores y tallas desde la API
+    async function cargarColoresYTallas(idProducto) {
+        try {
+            // Cargar colores
+            const coloresResponse = await fetch('/api/obtenerColoresProducto', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: `id_producto=${idProducto}`
+            });
+            
+            if (coloresResponse.ok) {
+                const colores = await coloresResponse.json();
+                
+                // Llenar select de colores
+                colores.forEach(color => {
+                    const option = document.createElement('option');
+                    option.value = color.id_color;
+                    option.textContent = color.nombre_color;
+                    colorSelect.appendChild(option);
+                });
+            }
 
-    //         // Importar y usar la función addToCart del módulo carrito
-    //         import('./carrito.js').then(carritoModule => {
-    //             carritoModule.addToCart(productToAdd);
+            // Cargar tallas
+            const tallasResponse = await fetch('/api/obtenerTallasProducto', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: `id_producto=${idProducto}`
+            });
+            
+            if (tallasResponse.ok) {
+                const tallas = await tallasResponse.json();
                 
-    //             // Mostrar mensaje de éxito
-    //             Swal.fire({
-    //                 icon: 'success',
-    //                 title: '¡Producto agregado!',
-    //                 text: `${productToAdd.name} se agregó al carrito`,
-    //                 timer: 2000,
-    //                 showConfirmButton: false
-    //             });
+                // Llenar select de tallas
+                tallas.forEach(talla => {
+                    const option = document.createElement('option');
+                    option.value = talla.id_talla;
+                    option.textContent = talla.nombre_talla;
+                    sizeSelect.appendChild(option);
+                });
+            }
+
+        } catch (error) {
+            console.error('Error al cargar colores y tallas:', error);
+        }
+    }
+
+    // Función para verificar disponibilidad específica con talla y color
+    async function verificarDisponibilidadEspecifica() {
+        if (!currentProductData || !colorSelect.value || !sizeSelect.value) {
+            return;
+        }
+
+        try {
+            const response = await fetch('/api/verificarDisponibilidadEspecifica', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: `id_producto=${currentProductData.id}&cantidad_solicitada=${currentQuantity}&id_talla=${sizeSelect.value}&id_color=${colorSelect.value}`
+            });
+
+            if (response.ok) {
+                const resultado = await response.json();
                 
-    //             // Cerrar modal
-    //             closeProductModal.click();
-    //         });
-    //     }
-    // });
+                // Mostrar mensaje si no hay disponibilidad
+                if (!resultado.disponible) {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Stock limitado',
+                        text: 'Esta combinación de color y talla tiene stock limitado',
+                        timer: 3000,
+                        showConfirmButton: false
+                    });
+                    addToCartBtn.disabled = true;
+                } else {
+                    addToCartBtn.disabled = !canAddToCart();
+                }
+            }
+        } catch (error) {
+            console.error('Error al verificar disponibilidad específica:', error);
+        }
+    }
 
     // Función para cerrar el modal de producto
     closeProductModal.addEventListener('click', function() {

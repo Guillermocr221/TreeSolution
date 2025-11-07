@@ -6,7 +6,7 @@ class Detalleventa extends ActiveRecord{
 
     protected static $tabla = 'detalleventa';
 
-    protected static $columnasDB = ['ID_DetalleVenta', 'ID_Venta','ID_Producto','cantidad','precio_Unitario', 'subtotal'] ;
+    protected static $columnasDB = ['ID_DetalleVenta', 'ID_Venta','ID_Producto','cantidad','precio_Unitario', 'subtotal', 'id_talla', 'id_color'] ;
 
     //Nombre de id Primary Key necesario para las incerciones
     protected $nombreDeId = 'ID_DetalleVenta';
@@ -14,7 +14,7 @@ class Detalleventa extends ActiveRecord{
     //variable id provisional en caso no se requiera usar un nombre especifico de id
     public $id;
 
-    public $ID_DetalleVenta, $ID_Venta, $ID_Producto, $cantidad, $precio_Unitario, $subtotal;
+    public $ID_DetalleVenta, $ID_Venta, $ID_Producto, $cantidad, $precio_Unitario, $subtotal, $id_talla, $id_color;
     
     public function __construct($args = []) {
         $this->ID_DetalleVenta = $args['ID_DetalleVenta'] ?? null;
@@ -23,6 +23,8 @@ class Detalleventa extends ActiveRecord{
         $this->cantidad = $args['cantidad'] ?? null;
         $this->precio_Unitario = $args['precio_Unitario'] ?? null;
         $this->subtotal = $args['subtotal'] ?? null;
+        $this->id_talla = $args['id_talla'] ?? null;
+        $this->id_color = $args['id_color'] ?? null;
     }
     
-}    
+}

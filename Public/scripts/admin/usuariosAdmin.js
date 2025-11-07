@@ -6,70 +6,64 @@ import { mostrarNotificacion } from './notificacionesAdmin.js';
  */
 export function configurarUsuarios() {
     configurarAccionesUsuarios();
+    configurarFiltrosUsuarios();
 }
 
 /**
- * Configura los eventos de acciones de usuarios (activar, desactivar)
+ * Configura los eventos de acciones de usuarios (deshabilitar/habilitar)
  */
 function configurarAccionesUsuarios() {
-    // Botones de activar usuario
-    document.querySelectorAll('.button__activarUsuario').forEach(boton => {
-        boton.addEventListener('click', (e) => {
-            const idUsuario = e.currentTarget.dataset.id;
-            activarUsuario(idUsuario);
-        });
-    });
-
-    // Botones de desactivar usuario
-    document.querySelectorAll('.button__eliminarUsuario').forEach(boton => {
-        boton.addEventListener('click', (e) => {
-            const idUsuario = e.currentTarget.dataset.id;
-            desactivarUsuario(idUsuario);
-        });
-    });
-}
-
-/**
- * Activa un usuario que estaba desactivado
- * @param {string} idUsuario - El ID del usuario a activar
- */
-async function activarUsuario(idUsuario) {
-    if (!confirm('¿Estás seguro de que deseas activar este usuario?')) {
-        return;
-    }
-
-    try {
-        const datosFormulario = new FormData();
-        datosFormulario.append('ID_Usuario', idUsuario);
-
-        const respuesta = await fetch('/api/activarUsuario', {
-            method: 'POST',
-            body: datosFormulario
-        });
-
-        if (respuesta.ok) {
-            location.reload();
-        } else {
-            mostrarNotificacion('Error al activar el usuario', 'error');
+    // Event listeners usando delegación para botones dinámicos
+    document.addEventListener('click', function(e) {
+        // Botón deshabilitar usuario
+        if (e.target.closest('.button__eliminarUsuario')) {
+            const btn = e.target.closest('.button__eliminarUsuario');
+            const idUsuario = btn.getAttribute('data-id');
+            deshabilitarUsuario(idUsuario);
         }
-    } catch (error) {
-        console.error('Error:', error);
-        mostrarNotificacion('Error de conexión', 'error');
+        
+        // Botón habilitar usuario
+        if (e.target.closest('.button__activarUsuario')) {
+            const btn = e.target.closest('.button__activarUsuario');
+            const idUsuario = btn.getAttribute('data-id');
+            habilitarUsuario(idUsuario);
+        }
+    });
+}
+
+/**
+ * Configura los filtros de usuarios
+ */
+function configurarFiltrosUsuarios() {
+    // Filtro de búsqueda
+    const userSearch = document.getElementById('userSearch');
+    if (userSearch) {
+        userSearch.addEventListener('input', function() {
+            filtrarUsuarios(this.value);
+        });
+    }
+    
+    // Filtro por tipo de usuario
+    const userTypeFilter = document.getElementById('userTypeFilter');
+    if (userTypeFilter) {
+        userTypeFilter.addEventListener('change', function() {
+            filtrarUsuariosPorTipo(this.value);
+        });
     }
 }
 
 /**
- * Desactiva un usuario
- * @param {string} idUsuario - El ID del usuario a desactivar
+ * Deshabilita un usuario (cambia su estado a inactivo)
+ * @param {string} idUsuario - El ID del usuario a deshabilitar
  */
-async function desactivarUsuario(idUsuario) {
-    if (!confirm('¿Estás seguro de que deseas desactivar este usuario?')) {
+async function deshabilitarUsuario(idUsuario) {
+    if (!confirm('¿Estás seguro de que deseas deshabilitar este usuario? El usuario no podrá acceder al sistema.')) {
         return;
     }
 
     try {
         const datosFormulario = new FormData();
-        datosFormulario.append('ID_Usuario', idUsuario);
+        datosFormulario.append('id_usuario', idUsuario);
 
         const respuesta = await fetch('/api/borrarUsuario', {
             method: 'POST',
@@ -77,12 +71,81 @@ async function desactivarUsuario(idUsuario) {
         });
 
         if (respuesta.ok) {
-            location.reload();
+            mostrarNotificacion('Usuario deshabilitado correctamente', 'success');
+            setTimeout(() => location.reload(), 1500);
         } else {
-            mostrarNotificacion('Error al desactivar el usuario', 'error');
+            mostrarNotificacion('Error al deshabilitar el usuario', 'error');
         }
     } catch (error) {
         console.error('Error:', error);
         mostrarNotificacion('Error de conexión', 'error');
     }
+}
+
+/**
+ * Habilita un usuario (cambia su estado a activo)
+ * @param {string} idUsuario - El ID del usuario a habilitar
+ */
+async function habilitarUsuario(idUsuario) {
+    if (!confirm('¿Estás seguro de que deseas habilitar este usuario? El usuario podrá acceder nuevamente al sistema.')) {
+        return;
+    }
+
+    try {
+        const datosFormulario = new FormData();
+        datosFormulario.append('id_usuario', idUsuario);
+
+        const respuesta = await fetch('/api/activarUsuario', {
+            method: 'POST',
+            body: datosFormulario
+        });
+
+        if (respuesta.ok) {
+            mostrarNotificacion('Usuario habilitado correctamente', 'success');
+            setTimeout(() => location.reload(), 1500);
+        } else {
+            mostrarNotificacion('Error al habilitar el usuario', 'error');
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        mostrarNotificacion('Error de conexión', 'error');
+    }
+}
+
+/**
+ * Filtra usuarios por término de búsqueda
+ * @param {string} termino - Término de búsqueda
+ */
+function filtrarUsuarios(termino) {
+    const usuarios = document.querySelectorAll('.user-card');
+    const terminoLower = termino.toLowerCase();
+    
+    usuarios.forEach(usuario => {
+        const nombre = usuario.querySelector('.user-header h3').textContent.toLowerCase();
+        const email = usuario.querySelector('.user-meta span:first-child').textContent.toLowerCase();
+        
+        if (nombre.includes(terminoLower) || email.includes(terminoLower)) {
+            usuario.style.display = 'block';
+        } else {
+            usuario.style.display = 'none';
+        }
+    });
+}
+
+/**
+ * Filtra usuarios por tipo
+ * @param {string} tipo - Tipo de usuario ('todos', 'cliente', 'admin')
+ */
+function filtrarUsuariosPorTipo(tipo) {
+    const usuarios = document.querySelectorAll('.user-card');
+    
+    usuarios.forEach(usuario => {
+        const tipoUsuario = usuario.getAttribute('data-type');
+        
+        if (tipo === 'todos' || tipoUsuario === tipo) {
+            usuario.style.display = 'block';
+        } else {
+            usuario.style.display = 'none';
+        }
+    });
 }

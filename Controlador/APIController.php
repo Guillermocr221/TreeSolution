@@ -7,7 +7,9 @@ use Model\Cliente;
 use Model\Detalleventa;
 use Model\User;
 use Model\Categoria;
-
+use Model\Color;
+use Model\Talla;
+use Model\ProductoTallaColor;
 
 class APIController{
 
@@ -45,6 +47,9 @@ class APIController{
             return;
         }
         $venta->ID_Cliente = (int) $cliente->ID_Cliente;
+        
+        // Establecer tipo de pago como Efectivo por defecto
+        $venta->tipoPago = 'Efectivo';
 
         $resultado = $venta->guardar();
 
@@ -57,16 +62,35 @@ class APIController{
             $cantidad = $producto['cantidad'];
             $precio_Unitario = $producto['precioUnitario'];
             $subtotal = $cantidad * $precio_Unitario;
+            
+            // Obtener talla y color si están disponibles
+            $id_talla = isset($producto['tallaId']) && $producto['tallaId'] !== '' ? $producto['tallaId'] : null;
+            $id_color = isset($producto['colorId']) && $producto['colorId'] !== '' ? $producto['colorId'] : null;
 
             $args = [
                 'ID_Venta'=> $ID_Venta, 
                 'ID_Producto' => $ID_Producto, 
                 'cantidad'=> $cantidad, 
                 'precio_Unitario'=> $precio_Unitario, 
-                'subtotal'=>$subtotal
+                'subtotal'=>$subtotal,
+                'id_talla' => $id_talla,
+                'id_color' => $id_color
             ];
 
-            Producto::reducirStock($ID_Producto, $cantidad);
+            // Reducir stock específico o general
+            if ($id_talla && $id_color) {
+                // Reducir stock específico de la combinación talla/color
+                $queryReducirStock = "UPDATE productos_tallas_colores 
+                                    SET cantidad = cantidad - {$cantidad} 
+                                    WHERE id_producto = {$ID_Producto} 
+                                    AND id_talla = {$id_talla} 
+                                    AND id_color = {$id_color}";
+                ProductoTallaColor::SQL($queryReducirStock);
+            } else {
+                // Reducir stock general del producto
+                Producto::reducirStock($ID_Producto, $cantidad);
+            }
+            
             $productoAventa = new Detalleventa($args);
             $productoAventa->guardar();
         }
@@ -77,7 +101,7 @@ class APIController{
     public static function eliminarUsuario(){
         $idUsuario = $_POST['id_usuario'];
 
-        $query = "UPDATE usuarios SET usuario = 'inactivo' WHERE ID_Usuario = '$idUsuario' ";
+        $query = "UPDATE usuarios SET estado = 'inactivo' WHERE ID_Usuario = '$idUsuario' ";
 
         $usuario = User::SQL($query);
 
@@ -87,7 +111,7 @@ class APIController{
     public static function activarUsuario(){
         $idUsuario = $_POST['id_usuario'];
 
-        $query = "UPDATE usuarios SET usuario = 'cliente' WHERE ID_Usuario = '$idUsuario' ";
+        $query = "UPDATE usuarios SET estado = 'activo' WHERE ID_Usuario = '$idUsuario' ";
 
         $usuario = User::SQL($query);
 
@@ -144,6 +168,81 @@ class APIController{
             } else {
                 echo json_encode(['disponible' => true]);
             }
+        }
+    }
+
+    // Obtener colores disponibles para un producto
+    public static function obtenerColoresProducto(){
+        if($_SERVER['REQUEST_METHOD'] == 'POST'){
+            $id_producto = $_POST['id_producto'];
+            $colores = Color::obtenerColoresPorProducto($id_producto);
+            echo json_encode($colores);
+        }
+    }
+
+    // Obtener tallas disponibles para un producto
+    public static function obtenerTallasProducto(){
+        if($_SERVER['REQUEST_METHOD'] == 'POST'){
+            $id_producto = $_POST['id_producto'];
+            $tallas = Talla::obtenerTallasPorProducto($id_producto);
+            echo json_encode($tallas);
+        }
+    }
+
+    // Obtener todas las combinaciones disponibles para un producto
+    public static function obtenerCombinacionesProducto(){
+        if($_SERVER['REQUEST_METHOD'] == 'POST'){
+            $id_producto = $_POST['id_producto'];
+            $combinaciones = ProductoTallaColor::obtenerCombinacionesPorProducto($id_producto);
+            echo json_encode($combinaciones);
+        }
+    }
+
+    // Verificar disponibilidad específica con talla y color
+    public static function verificarDisponibilidadEspecifica(){
+        if($_SERVER['REQUEST_METHOD'] == 'POST'){
+            $id_producto = $_POST['id_producto'];
+            $cantidad_solicitada = (int) $_POST['cantidad_solicitada'];
+            $id_talla = $_POST['id_talla'] ?? null;
+            $id_color = $_POST['id_color'] ?? null;
+
+            $disponible = ProductoTallaColor::verificarDisponibilidad(
+                $id_producto, 
+                $cantidad_solicitada, 
+                $id_talla, 
+                $id_color
+            );
+
+            echo json_encode(['disponible' => $disponible]);
+        }
+    }
+
+    // Guardar combinaciones de producto (tallas, colores, cantidades)
+    public static function guardarCombinacionesProducto(){
+        if($_SERVER['REQUEST_METHOD'] == 'POST'){
+            $id_producto = $_POST['id_producto'];
+            $combinaciones = json_decode($_POST['combinaciones'], true);
+
+            // Primero eliminar combinaciones existentes del producto
+            $queryEliminar = "DELETE FROM productos_tallas_colores WHERE id_producto = {$id_producto}";
+            ProductoTallaColor::SQL($queryEliminar);
+
+            $resultados = [];
+            
+            // Insertar nuevas combinaciones
+            foreach($combinaciones as $combinacion){
+                $nuevaCombinacion = new ProductoTallaColor([
+                    'id_producto' => $id_producto,
+                    'id_talla' => $combinacion['id_talla'],
+                    'id_color' => $combinacion['id_color'],
+                    'cantidad' => $combinacion['cantidad']
+                ]);
+
+                $resultado = $nuevaCombinacion->guardar();
+                $resultados[] = $resultado;
+            }
+
+            echo json_encode(['success' => true, 'resultados' => $resultados]);
         }
     }
 

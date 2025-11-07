@@ -78,10 +78,11 @@ class PaginasController{
 
         }else{
             session_start();
-            if($_SESSION['id']){
-                $userId = $_SESSION['id'];
+            $userId = $_SESSION['id'] ?? null;
+
+            if ($userId) {
                 $usuarioLogeado = User::where('ID_Usuario', $userId);
-            }else{
+            } else {
                 $usuarioLogeado = new User;
             }
             

@@ -241,10 +241,6 @@
                             <label class="product-option-label">Color</label>
                             <select class="product-select" id="modalColorSelect">
                                 <option value="">Selecciona un color</option>
-                                <option value="negro">Negro</option>
-                                <option value="blanco">Blanco</option>
-                                <option value="azul">Azul</option>
-                                <option value="rojo">Rojo</option>
                             </select>
                         </div>
 
@@ -252,10 +248,6 @@
                             <label class="product-option-label">Talla</label>
                             <select class="product-select" id="modalSizeSelect">
                                 <option value="">Selecciona una talla</option>
-                                <option value="S">S</option>
-                                <option value="M">M</option>
-                                <option value="L">L</option>
-                                <option value="XL">XL</option>
                             </select>
                         </div>
                     </div>

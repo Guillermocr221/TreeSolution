@@ -7,6 +7,7 @@ import { configurarUsuarios } from './admin/usuariosAdmin.js';
 import { configurarVentas, alternarDetallesVenta } from './admin/ventasAdmin.js';
 import { mostrarNotificacion } from './admin/notificacionesAdmin.js';
 
+
 // Variables globales
 let seccionActual = 'products';
 

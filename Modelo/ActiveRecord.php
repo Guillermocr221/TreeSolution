@@ -8,7 +8,6 @@ class ActiveRecord{
     protected static $tabla = '';
     protected static $columnasDB = [];
 
-
     //Definir conexion a la DB
     public static function setDB($database){
         self::$db = $database;
@@ -69,7 +68,9 @@ class ActiveRecord{
     // Registros - CRUD
     public function guardar() {
         $resultado = '';
-        if(!is_null($this->id)) {
+        $idColumna = static::$nombreDeId ?? 'id';
+
+        if(!is_null($this->$idColumna)) {
             // actualizar
             $resultado = $this->actualizar();
         } else {
@@ -79,15 +80,7 @@ class ActiveRecord{
         return $resultado;
     }
 
-    public function obtenerNombreId(){
-        if( !isset($this->nombreDeId)){
-            $this->id = 'id';
-            return $this->id ;
-        }else{
-            return $this->nombreDeId;
-        }
-    }
-    //!BUSCAR REGISTROS
+    //! BUSCAR REGISTROS
     // Busca un registro por su id
     public static function where($columna, $valor) {
         $query = "SELECT * FROM " . static::$tabla  ." WHERE {$columna} = '{$valor}'";
@@ -99,8 +92,9 @@ class ActiveRecord{
     // Identificar y unir los atributos de la BD
     public function atributos() {
         $atributos = [];
+        $columnaId = static::$nombreDeId ?? 'id';
         foreach(static::$columnasDB as $columna) {
-            $columnName = $this->obtenerNombreId();
+            $columnName = $this->$columnaId;
 
             if($columna === $columnName ) continue;
             $atributos[$columna] = $this->$columna;
@@ -118,7 +112,7 @@ class ActiveRecord{
         return $sanitizado;
     }
 
-    //Listar todos los resultados de la tabla
+    // Listar todos los resultados de la tabla
     public static function all(){
         $query = "SELECT * FROM ". static::$tabla;
 
@@ -174,10 +168,12 @@ class ActiveRecord{
             $valores[] = "{$key}='{$value}'";
         }
 
+        $idColumna = static::$nombreDeId ?? 'id';
+
         // Consulta SQL
         $query = "UPDATE " . static::$tabla ." SET ";
         $query .=  join(', ', $valores );
-        $query .= " WHERE id = '" . self::$db->escape_string($this->id) . "' ";
+        $query .= " WHERE {$idColumna} = '" . self::$db->escape_string($this->$idColumna) . "' ";
         $query .= " LIMIT 1 "; 
 
         // Actualizar BD

@@ -1,5 +1,3 @@
-
-
 /* Dashboard Admin Styles - Modern Design */
 :root {
     --primary: #2563eb;
@@ -777,4 +775,226 @@ select:focus {
 /* Hidden elements */
 .hidden {
     display: none !important;
+}
+
+/* Gestión de Inventario por Talla y Color */
+.inventory-management {
+    margin-top: 2rem;
+    padding: 1.5rem;
+    border: 1px solid #e1e5e9;
+    border-radius: 12px;
+    background: #f8f9fa;
+}
+
+.inventory-management h3 {
+    margin: 0 0 1.5rem 0;
+    color: #2d3748;
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+.inventory-controls {
+    margin-bottom: 1.5rem;
+}
+
+.add-combination {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.add-combination select,
+.add-combination input[type="number"] {
+    padding: 8px 12px;
+    border: 1px solid #cbd5e0;
+    border-radius: 6px;
+    font-size: 0.875rem;
+    min-width: 120px;
+}
+
+.add-combination input[type="number"] {
+    width: 100px;
+}
+
+.combinations-list {
+    background: white;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid #e2e8f0;
+}
+
+.combinations-header {
+    display: grid;
+    grid-template-columns: 1fr 1fr 120px 80px;
+    gap: 12px;
+    padding: 12px 16px;
+    background: #f7fafc;
+    border-bottom: 1px solid #e2e8f0;
+    font-weight: 600;
+    font-size: 0.875rem;
+    color: #4a5568;
+}
+
+.combination-item {
+    display: grid;
+    grid-template-columns: 1fr 1fr 120px 80px;
+    gap: 12px;
+    padding: 12px 16px;
+    border-bottom: 1px solid #f1f5f9;
+    align-items: center;
+}
+
+.combination-item:last-child {
+    border-bottom: none;
+}
+
+.combination-talla,
+.combination-color {
+    font-size: 0.875rem;
+    color: #2d3748;
+}
+
+.combination-quantity {
+    display: flex;
+    align-items: center;
+}
+
+.quantity-input {
+    width: 80px;
+    padding: 6px 8px;
+    border: 1px solid #cbd5e0;
+    border-radius: 4px;
+    font-size: 0.875rem;
+    text-align: center;
+}
+
+.btn-sm {
+    padding: 6px 12px;
+    font-size: 0.75rem;
+    border-radius: 4px;
+}
+
+.btn-danger {
+    background: #e53e3e;
+    color: white;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.btn-danger:hover {
+    background: #c53030;
+}
+
+.btn-danger .material-symbols-outlined {
+    font-size: 16px;
+}
+
+/* Modal más grande para el formulario de edición */
+.large-modal .modal-content {
+    max-width: 900px;
+    width: 90%;
+}
+
+/* Responsive para la gestión de inventario */
+@media (max-width: 768px) {
+    .add-combination {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .add-combination select,
+    .add-combination input,
+    .add-combination button {
+        width: 100%;
+    }
+    
+    .combinations-header,
+    .combination-item {
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+    }
+    
+    .combinations-header span:nth-child(3),
+    .combinations-header span:nth-child(4),
+    .combination-item > div:nth-child(3),
+    .combination-item > button:nth-child(4) {
+        grid-column: 1 / -1;
+        justify-self: start;
+    }
+}
+
+/* Estilos para atributos de producto en ventas */
+.product-info-section {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    flex: 1;
+}
+
+.product-attributes {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.attribute-badge {
+    background: #e2e8f0;
+    color: #4a5568;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+    font-size: 0.75rem;
+    font-weight: 500;
+}
+
+.product-quantity-section {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.25rem;
+    font-size: 0.875rem;
+}
+
+.product-quantity {
+    color: #6b7280;
+}
+
+.product-price {
+    font-weight: 600;
+    color: #059669;
+}
+
+.product-subtotal {
+    font-weight: 600;
+    color: #1f2937;
+}
+
+.sale-product {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 0.75rem;
+    background: var(--muted);
+    border-radius: 0.5rem;
+    margin-bottom: 0.5rem;
+    gap: 1rem;
+}
+
+/* Responsive para la sección de ventas */
+@media (max-width: 768px) {
+    .sale-product {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+    
+    .product-quantity-section {
+        align-items: flex-start;
+    }
+    
+    .product-attributes {
+        margin-top: 0.25rem;
+    }
 }

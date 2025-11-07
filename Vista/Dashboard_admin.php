@@ -68,7 +68,7 @@
 
     <!-- Modal para modificar producto -->
     <div class="modal" id="modificarProductModal" data-idproducto="">
-        <div class="modal-content">
+        <div class="modal-content large-modal">
             <div class="modal-header">
                 <h2>Editar Producto</h2>
                 <span class="close" onclick="cerrarModal('modificarProductModal')">&times;</span>
@@ -103,7 +103,7 @@
                     </div>
                     
                     <div class="form-group">
-                        <label for="nuevoStock">Stock</label>
+                        <label for="nuevoStock">Stock (General)</label>
                         <input type="number" id="nuevoStock" name="stock" required autocomplete="off" min="0">
                     </div>
                     
@@ -112,6 +112,48 @@
                         <input type="file" name="imagen" id="nueva_imagen" accept="image/*">
                         <div class="image-preview">
                             <img id="imagenPVistaPrevia" src="/imagenes/store/productUndefined.png" alt="Vista previa">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sección de Tallas y Colores -->
+                <div class="inventory-management">
+                    <h3>Gestión de Inventario por Talla y Color</h3>
+                    
+                    <div class="inventory-controls">
+                        <div class="add-combination">
+                            <select id="tallaSelect">
+                                <option value="">Seleccionar Talla</option>
+                                <?php foreach($tallas as $talla): ?>
+                                    <option value="<?php echo $talla->id_talla; ?>"><?php echo $talla->nombre_talla; ?></option>
+                                <?php endforeach; ?>
+                            </select>
+                            
+                            <select id="colorSelect">
+                                <option value="">Seleccionar Color</option>
+                                <?php foreach($colores as $color): ?>
+                                    <option value="<?php echo $color->id_color; ?>"><?php echo $color->nombre_color; ?></option>
+                                <?php endforeach; ?>
+                            </select>
+                            
+                            <input type="number" id="cantidadInput" placeholder="Cantidad" min="0">
+                            
+                            <button type="button" id="agregarCombinacion" class="btn btn-secondary">
+                                <span class="material-symbols-outlined">add</span>
+                                Agregar
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="combinations-list" id="combinationsList">
+                        <div class="combinations-header">
+                            <span>Talla</span>
+                            <span>Color</span>
+                            <span>Cantidad</span>
+                            <span>Acciones</span>
+                        </div>
+                        <div id="combinationsContainer">
+                            <!-- Las combinaciones se llenarán dinámicamente -->
                         </div>
                     </div>
                 </div>
@@ -232,9 +274,14 @@
                                 <div class="user-details">
                                     <div class="user-header">
                                         <h3><?php echo $usuario->nombre . ' ' . $usuario->apellido; ?></h3>
-                                        <span class="badge badge-<?php echo $usuario->usuario === 'admin' ? 'primary' : 'secondary'; ?>">
-                                            <?php echo $usuario->usuario === 'admin' ? 'Administrador' : 'Cliente'; ?>
-                                        </span>
+                                        <div class="user-badges">
+                                            <span class="badge badge-<?php echo $usuario->usuario === 'admin' ? 'primary' : 'secondary'; ?>">
+                                                <?php echo $usuario->usuario === 'admin' ? 'Administrador' : 'Cliente'; ?>
+                                            </span>
+                                            <span class="badge badge-<?php echo $usuario->estado === 'activo' ? 'success' : 'danger'; ?>">
+                                                <?php echo ucfirst($usuario->estado); ?>
+                                            </span>
+                                        </div>
                                     </div>
                                     <div class="user-meta">
                                         <span><span class="material-symbols-outlined">mail</span><?php echo $usuario->email; ?></span>
@@ -245,12 +292,17 @@
                             
                             <?php if($usuario->usuario !== 'admin'): ?>
                                 <div class="user-actions">
-                                    <button class="btn btn-sm btn-primary button__activarUsuario" data-id="<?php echo $usuario->ID_Usuario; ?>">
-                                        Habilitar
-                                    </button>
-                                    <button class="btn btn-sm btn-danger button__eliminarUsuario" data-id="<?php echo $usuario->ID_Usuario; ?>">
-                                        Deshabilitar
-                                    </button>
+                                    <?php if($usuario->estado === 'activo'): ?>
+                                        <button class="btn btn-sm btn-danger button__eliminarUsuario" data-id="<?php echo $usuario->ID_Usuario; ?>">
+                                            <span class="material-symbols-outlined">block</span>
+                                            Deshabilitar
+                                        </button>
+                                    <?php else: ?>
+                                        <button class="btn btn-sm btn-success button__activarUsuario" data-id="<?php echo $usuario->ID_Usuario; ?>">
+                                            <span class="material-symbols-outlined">check_circle</span>
+                                            Habilitar
+                                        </button>
+                                    <?php endif; ?>
                                 </div>
                             <?php endif; ?>
                         </div>
@@ -405,11 +457,15 @@
                     foreach ($ventas as $venta) {
                         $ventasAgrupadas[$venta->ID_Venta]['cliente'] = $venta->cliente;
                         $ventasAgrupadas[$venta->ID_Venta]['total'] = $venta->total;
+                        $ventasAgrupadas[$venta->ID_Venta]['tipoPago'] = $venta->tipoPago;
+                        $ventasAgrupadas[$venta->ID_Venta]['fechaVenta'] = $venta->fechaVenta;
                         $ventasAgrupadas[$venta->ID_Venta]['productos'][] = [
                             'nombre' => $venta->nombre,
                             'cantidad' => $venta->cantidad,
                             'precio_Unitario' => $venta->precio_Unitario,
-                            'subtotal' => $venta->subtotal
+                            'subtotal' => $venta->subtotal,
+                            'nombre_talla' => $venta->nombre_talla,
+                            'nombre_color' => $venta->nombre_color
                         ];
                     }
                     
@@ -421,8 +477,8 @@
                                     <h3>Pedido #<?php echo $ID_Venta; ?></h3>
                                     <div class="sale-meta">
                                         <span><span class="material-symbols-outlined">person</span><?php echo $venta['cliente']; ?></span>
-                                        <span><span class="material-symbols-outlined">calendar_today</span>Reciente</span>
-                                        <span><span class="material-symbols-outlined">credit_card</span>Tarjeta</span>
+                                        <span><span class="material-symbols-outlined">calendar_today</span><?php echo date('d/m/Y H:i', strtotime($venta['fechaVenta'])); ?></span>
+                                        <span><span class="material-symbols-outlined">credit_card</span><?php echo $venta['tipoPago']; ?></span>
                                     </div>
                                     <div class="sale-summary">
                                         <span><?php echo count($venta['productos']); ?> producto<?php echo count($venta['productos']) > 1 ? 's' : ''; ?></span>
@@ -439,10 +495,22 @@
                                 <h4>Productos del Pedido:</h4>
                                 <?php foreach($venta['productos'] as $producto): ?>
                                     <div class="sale-product">
-                                        <span class="product-name"><?php echo $producto['nombre']; ?></span>
-                                        <span class="product-quantity"><?php echo $producto['cantidad']; ?> un.</span>
-                                        <span class="product-price">S/. <?php echo $producto['precio_Unitario']; ?></span>
-                                        <span class="product-subtotal">Subtotal: S/. <?php echo $producto['subtotal']; ?></span>
+                                        <div class="product-info-section">
+                                            <span class="product-name"><?php echo $producto['nombre']; ?></span>
+                                            <div class="product-attributes">
+                                                <?php if($producto['nombre_talla']): ?>
+                                                    <span class="attribute-badge">Talla: <?php echo $producto['nombre_talla']; ?></span>
+                                                <?php endif; ?>
+                                                <?php if($producto['nombre_color']): ?>
+                                                    <span class="attribute-badge">Color: <?php echo $producto['nombre_color']; ?></span>
+                                                <?php endif; ?>
+                                            </div>
+                                        </div>
+                                        <div class="product-quantity-section">
+                                            <span class="product-quantity"><?php echo $producto['cantidad']; ?> un.</span>
+                                            <span class="product-price">S/. <?php echo $producto['precio_Unitario']; ?></span>
+                                            <span class="product-subtotal">Subtotal: S/. <?php echo $producto['subtotal']; ?></span>
+                                        </div>
                                     </div>
                                 <?php endforeach; ?>
                             </div>

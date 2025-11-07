@@ -8,6 +8,8 @@ use Model\User;
 use Model\Ventas;
 use Model\ImpresionVenta;
 use Model\Categoria;
+use Model\Talla;
+use Model\Color;
 
 class AdminController {
 
@@ -22,6 +24,8 @@ class AdminController {
             $usuarios = User::all();
             $ventas  = self::obtenerVentas();
             $categorias = Categoria::all();
+            $tallas = Talla::all();
+            $colores = Color::all();
 
             if($_SESSION['admin'] == true){
 
@@ -29,7 +33,9 @@ class AdminController {
                     'productos' => $productos,
                     'usuarios' => $usuarios,
                     'ventas' => $ventas,
-                    'categorias' => $categorias
+                    'categorias' => $categorias,
+                    'tallas' => $tallas,
+                    'colores' => $colores
                 ]);     
 
             }else{
@@ -46,12 +52,17 @@ class AdminController {
 
         // Consultar la base de datos
         $consulta = "SELECT ventas.ID_Venta, CONCAT(usuarios.nombre, ' ', usuarios.apellido) as cliente, ";
-        $consulta .= "productos.nombre, detalleventa.cantidad, detalleventa.precio_Unitario, detalleventa.subtotal, ventas.total ";
+        $consulta .= "productos.nombre, detalleventa.cantidad, detalleventa.precio_Unitario, detalleventa.subtotal, ";
+        $consulta .= "ventas.total, ventas.tipoPago, ventas.fechaVenta, ";
+        $consulta .= "tallas.nombre_talla, colores.nombre_color ";
         $consulta .= "FROM ventas ";
         $consulta .= "INNER JOIN clientes ON ventas.ID_Cliente = clientes.ID_Cliente ";
         $consulta .= "INNER JOIN usuarios ON clientes.ID_Usuario = usuarios.ID_Usuario ";
         $consulta .= "INNER JOIN detalleventa ON detalleventa.ID_Venta = ventas.ID_Venta ";
         $consulta .= "INNER JOIN productos ON productos.ID_Producto = detalleventa.ID_Producto ";
+        $consulta .= "LEFT JOIN tallas ON detalleventa.id_talla = tallas.id_talla ";
+        $consulta .= "LEFT JOIN colores ON detalleventa.id_color = colores.id_color ";
+        $consulta .= "ORDER BY ventas.ID_Venta DESC";
         
         $ventas = ImpresionVenta::SQL($consulta);
         // echo json_encode($ventas);

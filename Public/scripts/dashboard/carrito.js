@@ -36,32 +36,49 @@ document.getElementById('addToCart').addEventListener('click', () => {
     const idproducto= document.getElementById('productModal').getAttribute('data-id');
     const imagenProducto = document.getElementById('modalImage').getAttribute('src');
     
+    // Obtener los valores y textos de talla y color
+    const tallaSelect = document.getElementById('modalSizeSelect');
+    const colorSelect = document.getElementById('modalColorSelect');
+    
+    const tallaId = tallaSelect.value;
+    const colorId = colorSelect.value;
+    const tallaNombre = tallaSelect.options[tallaSelect.selectedIndex]?.text || '';
+    const colorNombre = colorSelect.options[colorSelect.selectedIndex]?.text || '';
+    
     const productToAdd = {
         idproducto: idproducto,
         nombre: nombre,
         precio: parseFloat(precio),
         imagenProducto: imagenProducto,
-        cantidad: cantidad
+        cantidad: cantidad,
+        tallaId: tallaId,
+        colorId: colorId,
+        talla: tallaNombre,
+        color: colorNombre
     };
 
     addToCart(productToAdd);
 });
 
-export async function addToCart ( { nombre, precio, cantidad, idproducto, imagenProducto } ) {
+export async function addToCart ( { nombre, precio, cantidad, idproducto, imagenProducto, tallaId, colorId, talla, color } ) {
 
     if(id_session == false){
         window.location.href = '/login?estado=e1' ;
-
     }else{        
-        let cantidad_disponible = await comprobarStock(idproducto, cantidad);
+        let cantidad_disponible = await comprobarStock(idproducto, cantidad, tallaId, colorId);
 
         if(cantidad_disponible == true){
             // Hay cantidad suficiente en stock, se agrega al carrito
-            const existingProductIndex = cart.findIndex(product => product.nombre === nombre);
+            const existingProductIndex = cart.findIndex(product => 
+                product.nombre === nombre && 
+                product.tallaId === tallaId && 
+                product.colorId === colorId
+            );
+            
             if (existingProductIndex > -1) {
                 cart[existingProductIndex].cantidad += cantidad;
             } else {
-                cart.push({ nombre, precio, cantidad, idproducto, imagenProducto });
+                cart.push({ nombre, precio, cantidad, idproducto, imagenProducto, tallaId, colorId, talla, color });
                 console.log(cart);
             }
             Swal.fire({
@@ -86,14 +103,16 @@ export async function addToCart ( { nombre, precio, cantidad, idproducto, imagen
     }
 }
 
-async function comprobarStock(id_producto, cantidad_a_pedir){
+async function comprobarStock(id_producto, cantidad_a_pedir, id_talla = null, id_color = null){
 
     const datos = new FormData;
-          datos.append('idProducto',id_producto);
-          datos.append('cantidadSolicitada',cantidad_a_pedir);
+          datos.append('id_producto', id_producto);
+          datos.append('cantidad_solicitada', cantidad_a_pedir);
+          if (id_talla) datos.append('id_talla', id_talla);
+          if (id_color) datos.append('id_color', id_color);
 
     try {
-        let url = '/api/comprobarDisponibilidad' ;
+        let url = '/api/verificarDisponibilidadEspecifica';
         let respuesta = await fetch(url,{
             method: 'POST',
             body: datos
@@ -134,7 +153,9 @@ export let functionEnviarPedido = async ()=>{
             nombre: e.nombre,
             cantidad: e.cantidad,
             precioUnitario : e.precio,
-            idproducto : e.idproducto
+            idproducto : e.idproducto,
+            tallaId: e.tallaId || null,
+            colorId: e.colorId || null
         }
         return producto;
     });
@@ -230,11 +251,11 @@ function updateCart() {
                             <div class="cart-item-info">
                                 <h4>${product.nombre}</h4>
                                 <div class="cart-item-badges">
-                                    <span class="cart-item-badge">Talla M</span>
-                                    <span class="cart-item-badge">Color Azul</span>
+                                    ${product.talla ? `<span class="cart-item-badge">Talla: ${product.talla}</span>` : ''}
+                                    ${product.color ? `<span class="cart-item-badge">Color: ${product.color}</span>` : ''}
                                 </div>
                             </div>
-                            <button class="cart-item-remove" data-name="${product.nombre}">
+                            <button class="cart-item-remove" data-name="${product.nombre}" data-talla="${product.talla || ''}" data-color="${product.color || ''}">
                                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                     <polyline points="3,6 5,6 21,6"></polyline>
                                     <path d="m19,6v14a2,2 0 0,1 -2,2H7a2,2 0 0,1 -2,-2V6m3,0V4a2,2 0 0,1 2,-2h4a2,2 0 0,1 2,2v2"></path>
@@ -245,13 +266,13 @@ function updateCart() {
                         </div>
                         <div class="cart-item-footer">
                             <div class="cart-item-quantity">
-                                <button class="quantity-btn decrease-btn" data-id="${product.idproducto}">
+                                <button class="quantity-btn decrease-btn" data-id="${product.idproducto}" data-talla="${product.talla || ''}" data-color="${product.color || ''}">
                                     <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                         <line x1="5" y1="12" x2="19" y2="12"></line>
                                     </svg>
                                 </button>
                                 <span class="quantity-display">${product.cantidad}</span>
-                                <button class="quantity-btn increase-btn" data-id="${product.idproducto}">
+                                <button class="quantity-btn increase-btn" data-id="${product.idproducto}" data-talla="${product.talla || ''}" data-color="${product.color || ''}">
                                     <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                         <line x1="12" y1="5" x2="12" y2="19"></line>
                                         <line x1="5" y1="12" x2="19" y2="12"></line>
@@ -336,7 +357,16 @@ function updateQuantity(productId, change) {
 
 // Función para eliminar un ítem del carrito
 function removeItemFromCart(productName) {
-    const itemIndex = cart.findIndex(product => product.nombre == productName);
+    // Cambiar para usar también tallaId y colorId para identificar el producto exacto
+    const itemIndex = cart.findIndex(product => {
+        const removeBtn = document.querySelector(`[data-name="${productName}"]`);
+        const talla = removeBtn?.getAttribute('data-talla') || '';
+        const color = removeBtn?.getAttribute('data-color') || '';
+        
+        return product.nombre === productName && 
+               (product.talla || '') === talla && 
+               (product.color || '') === color;
+    });
 
     if (itemIndex > -1) {
         cart.splice(itemIndex, 1);

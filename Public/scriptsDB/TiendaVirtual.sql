@@ -32,6 +32,8 @@ CREATE TABLE IF NOT EXISTS `treesolutiondb`.`usuarios` (
   `email` VARCHAR(45) NULL DEFAULT NULL,
   `contrasena` VARCHAR(10) NOT NULL,
   `usuario` VARCHAR(45) NOT NULL,
+  `imagen` VARCHAR(255) NULL DEFAULT 'user_generico.png',
+  `codigo` VARCHAR(10) NULL DEFAULT NULL,
   PRIMARY KEY (`ID_Usuario`))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4

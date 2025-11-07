@@ -9,6 +9,7 @@ use MVC\Router;
 use Controllers\PaginasController;
 use Controllers\LoginController;
 use Controllers\AdminController;
+use Controllers\MailController;
 
 
 $router = new Router();
@@ -24,6 +25,9 @@ $router->get('/logout', [LoginController::class, 'logout']);
 
 $router->get('/registrarse',[LoginController::class, 'CrearCuenta']);
 $router->post('/registrarse',[LoginController::class, 'CrearCuenta']);
+
+$router->get('/confirmar-codigo',[LoginController::class, 'confirmarCodigo']);
+$router->post('/confirmar-codigo',[LoginController::class, 'confirmarCodigo']);
 
 $router->get('/admin', [AdminController::class, 'index']);
 $router->post('/admin/registrarProducto',[AdminController::class, 'añadirProducto']);
@@ -43,6 +47,13 @@ $router->post('/api/activarUsuario', [APIController::class, 'activarUsuario']);
 $router->post('/api/obtenerProducto', [APIController::class, 'obtenerProducto']);
 $router->post('/api/eliminarProducto', [APIController::class, 'eliminarProducto']);
 $router->post('/api/comprobarDisponibilidad', [APIController::class, 'comprobarDisponibilidad']);
+
+// Nuevas rutas para colores, tallas y combinaciones
+$router->post('/api/obtenerColoresProducto', [APIController::class, 'obtenerColoresProducto']);
+$router->post('/api/obtenerTallasProducto', [APIController::class, 'obtenerTallasProducto']);
+$router->post('/api/obtenerCombinacionesProducto', [APIController::class, 'obtenerCombinacionesProducto']);
+$router->post('/api/verificarDisponibilidadEspecifica', [APIController::class, 'verificarDisponibilidadEspecifica']);
+$router->post('/api/guardarCombinacionesProducto', [APIController::class, 'guardarCombinacionesProducto']);
 
 // $router->get('/api/imprimirProducto',[AdminController::class, 'obtenerVentas']);
 
